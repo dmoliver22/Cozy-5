@@ -140,6 +140,19 @@ section.tab{display:none}section.tab.active{display:block}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:13.5px;z-index:30;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
 .ro{font-size:12.5px;color:var(--muted);font-family:var(--mono)}
+.chal{border:1px solid var(--line);background:var(--panel);padding:12px 14px;margin-top:6px}
+.chal .hd{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.chal .hd h4{font-size:15px}
+.chal .out{white-space:pre-wrap;font-size:13.5px;color:var(--muted);max-height:220px;overflow:auto}
+.chal .blk{margin-top:10px;font-size:13.5px}
+.chal .blk b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.chal ul{margin:2px 0 0;padding-left:18px}
+.chal li+li{margin-top:3px}
+.chal .path{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;border-left:3px solid var(--green);padding:4px 10px;margin-top:6px;background:var(--panel-2)}
+.chal .path .btn{flex:none}
+.pill.holds{background:var(--green-soft);color:var(--green)}.pill.weakened{background:var(--gold-soft);color:var(--gold)}.pill.fails{background:var(--red-soft);color:var(--red)}.pill.stands{background:var(--grey-soft);color:var(--grey)}.pill.reopen{background:var(--green-soft);color:var(--green)}
+.hist{border-top:1px dashed var(--line);padding-top:8px;margin-top:10px}
+.hist details{margin-top:6px}.hist summary{cursor:pointer;font-size:13px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -234,6 +247,9 @@ section.tab{display:none}section.tab.active{display:block}
         <li><b>Leave a hanging thread.</b> Every territory ends with the next thread to pull, or an explicit "none".</li>
         <li><b>Journal the cycle.</b> What was tried, what moved, what the gut says next.</li>
       </ol>
+      <h2 style="margin-top:20px">The standard</h2>
+      <p>We are looking for the best of everything, not the best of what a search happened to turn up. A mediocre find logged as a candidate is worse than an honest dead end, because it pulls attention from the hunt. If a path is wrong, stop walking it. Do not keep following a vector to have something to show. Log the territory as exhausted, write down why, and turn.</p>
+      <p>Every record can be challenged with a button. The challenge is not an attempt to fail it. It is a second pair of eyes on the same side of the table: what is the strongest objection, what evidence is missing, what would change the verdict, and what new path does the objection open. A challenge that reopens a dead end or spawns a new territory has done its job as much as one that confirms a unicorn.</p>
       <h2 style="margin-top:20px">Kill rules</h2>
       <ul>
         <li>The moat is a skill, a relationship, or hustle. Kill it. That is an earned advantage, not a windfall.</li>
@@ -241,6 +257,7 @@ section.tab{display:none}section.tab.active{display:block}
         <li>You cannot articulate why it is unclaimed. Assume it is claimed.</li>
         <li>It needs meaningful capital or a licence you cannot get within weeks. Kill it unless the licence itself is the windfall.</li>
         <li>Three funded competitors or a "best tools for X" listicle exists. The window is closing. Kill it.</li>
+        <li>It is only here because it was the best thing the search found. That is not a reason. Kill it or send it back to lead with a named evidence gap.</li>
       </ul>
       <h2 style="margin-top:20px">Decision record</h2>
       <p>Decisions go in the journal as entries of kind "decision" with the options considered and the reason. Pivots in search direction go in as "pivot". The journal is the memory of the hunt across sessions.</p>
@@ -268,7 +285,9 @@ const SCORE_DIMS=[
 ];
 const MOAT_TYPES=['Scarce asset','Grandfathered entry','Mandatory stop','Exclusive','Default slot','Orphaned customers','Giant needs you','Locked-in customers','Caught the wave','Handed for free','Irreplaceable data','Only road','Legal for you only'];
 const STATE={cands:[],terrs:[],vectors:[],recipes:[],moats:[],journal:[],canWrite:false,db:null,uid:null};
-let db=null;
+let db=null,sampleFn=null;
+function lastChal(x){return (x.challenges&&x.challenges[0])||null}
+function slug(t){return String(t).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||('t-'+Date.now())}
 
 // tabs
 $$('nav.tabs button').forEach(b=>b.addEventListener('click',()=>{ $$('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b)); $$('section.tab').forEach(s=>s.classList.toggle('active',s.id==='tab-'+b.dataset.tab)); try{localStorage.setItem('wh-tab',b.dataset.tab)}catch(e){} }));
@@ -299,7 +318,7 @@ function renderCands(){
   const q=$('#cand-q').value.toLowerCase(),st=$('#cand-status').value,mo=$('#cand-moat').value;
   const sel=$('#cand-moat');if(sel.options.length<2){MOAT_TYPES.forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;sel.appendChild(o)})}
   const rows=STATE.cands.filter(c=>(!st||c.status===st)&&(!mo||c.moat===mo)&&(!q||[c.name,c.oneline,c.evidence,c.window].join(' ').toLowerCase().includes(q))).sort((a,b)=>({unicorn:0,vetting:1,lead:2,killed:3}[a.status]-{unicorn:0,vetting:1,lead:2,killed:3}[b.status])||total(b)-total(a));
-  $('#cand-tbl tbody').innerHTML=rows.length?rows.map(c=>`<tr class="row" data-cand="${esc(c.id)}"><td><div class="name">${esc(c.name)}</div><div class="sub">${esc(c.oneline)}</div></td><td class="mono">${esc(c.moat||'—')}</td><td class="sub">${esc((c.window||'').slice(0,90))}</td><td><div class="score num">${total(c)}<span class="muted">/40</span></div><div class="bar ${meetsBar(c)?'gold':''}"><i style="width:${total(c)/40*100}%"></i></div></td><td><span class="pill ${esc(c.status)}">${esc(c.status)}</span>${meetsBar(c)&&c.status!=='unicorn'?'<div class="mono muted" style="margin-top:4px">meets bar</div>':''}</td></tr>`).join(''):`<tr><td colspan="5"><div class="empty">No candidates match.</div></td></tr>`;
+  $('#cand-tbl tbody').innerHTML=rows.length?rows.map(c=>`<tr class="row" data-cand="${esc(c.id)}"><td><div class="name">${esc(c.name)}</div><div class="sub">${esc(c.oneline)}</div></td><td class="mono">${esc(c.moat||'—')}</td><td class="sub">${esc((c.window||'').slice(0,90))}</td><td><div class="score num">${total(c)}<span class="muted">/40</span></div><div class="bar ${meetsBar(c)?'gold':''}"><i style="width:${total(c)/40*100}%"></i></div></td><td><span class="pill ${esc(c.status)}">${esc(c.status)}</span>${meetsBar(c)&&c.status!=='unicorn'?'<div class="mono muted" style="margin-top:4px">meets bar</div>':''}${lastChal(c)?`<div style="margin-top:4px"><span class="pill ${esc(lastChal(c).verdict)}">challenged: ${esc(lastChal(c).verdict)}</span></div>`:''}</td></tr>`).join(''):`<tr><td colspan="5"><div class="empty">No candidates match.</div></td></tr>`;
 }
 function renderTerrs(){
   const q=$('#terr-q').value.toLowerCase(),st=$('#terr-status').value,vc=$('#terr-vector').value;
@@ -358,7 +377,9 @@ function openCand(id){
   ${fld('c-territory','Territory it came from',c.territory)}
   ${fld('c-kill','Kill reason (if killed)',c.kill)}
   ${fld('c-next','Next action',c.next)}
+  ${c.id?challengeBox(c,'cand'):''}
   <div class="actions"><div>${c.id&&STATE.canWrite?'<button class="btn danger sm" id="dr-del">Delete</button>':''}</div><div>${STATE.canWrite?'<button class="btn" id="dr-save">Save</button>':''}</div></div>`;
+  if(c.id)wireChallenge(c,'cand');
   $('#dr-close').addEventListener('click',closeDrawer);
   const live=()=>{const sc={};SCORE_DIMS.forEach(([k])=>{sc[k]=Number($('#s-'+k).value);$('#sv-'+k).textContent=sc[k]});const rec=$$('#c-recipes .chip[aria-pressed="true"]').map(b=>b.dataset.r);const tmp={scores:sc,recipes:rec,moat:$('#c-moat').value};const t=total(tmp);$('#s-total').textContent=t;const ok=meetsBar(tmp);const v=$('#dr-verdict');v.className='verdict '+(ok?'yes':'no');v.textContent=ok?'Meets the unicorn bar':'Below the bar: '+(t<32?'total '+t+'/40':minDim(tmp)<3?'a dimension under 3':!rec.length?'no hiding reason named':'no moat type')};
   SCORE_DIMS.forEach(([k])=>$('#s-'+k).addEventListener('input',live));$('#c-moat').addEventListener('input',live);
@@ -386,7 +407,9 @@ function openTerr(id){
   ${fld('t-deadend','Dead-end reason (why there is no windfall here)',t.deadend,'textarea')}
   ${fld('t-thread','Hanging thread to pull next ("none" if truly done)',t.thread)}
   ${fld('t-date','Date dug',t.date)}
+  ${t.id?challengeBox(t,'terr'):''}
   <div class="actions"><div>${t.id&&STATE.canWrite?'<button class="btn danger sm" id="dr-del">Delete</button>':''}</div><div>${STATE.canWrite?'<button class="btn" id="dr-save">Save</button>':''}</div></div>`;
+  if(t.id)wireChallenge(t,'terr');
   $('#dr-close').addEventListener('click',closeDrawer);
   if(!t.id){$('#t-name').addEventListener('input',()=>{const q=$('#t-name').value;const m=STATE.terrs.map(x=>[overlap(q,x),x]).filter(x=>x[0]>=0.5).sort((a,b)=>b[0]-a[0]).slice(0,3);$('#t-warn').innerHTML=m.length?`<div class="warn">Possible overlap: ${m.map(([s,x])=>esc(x.name)+' ('+x.status+')').join('; ')}. Check before you dig.</div>`:''})}
   if(!STATE.canWrite)panel.querySelectorAll('input,select,textarea').forEach(i=>i.disabled=true);
@@ -413,11 +436,72 @@ $('#cand-new').addEventListener('click',()=>openCand(null));
 $('#terr-new').addEventListener('click',()=>openTerr(null));
 $('#jour-new').addEventListener('click',()=>openJour(null));
 
+
+// ---------- challenge ----------
+function challengeBox(rec,kind){
+  const hist=(rec.challenges||[]);
+  const title=kind==='cand'?'Challenge this candidate':'Challenge this verdict';
+  const sub=kind==='cand'?'Same side of the table. Strongest objection, missing evidence, what would change the verdict, and any new path it opens.':'Was this ground really exhausted? What unconventional turn was missed, and does the dead end point somewhere new?';
+  return `<div class="chal" id="chal"><div class="hd"><h4>${title}</h4><div style="display:flex;gap:6px">${sampleFn?`<button class="btn sm" id="chal-go">Challenge</button><button class="btn ghost sm" id="chal-stop" hidden>Stop</button>`:`<span class="ro">challenge needs a Claude viewer</span>`}</div></div><div class="m" style="font-size:13px;color:var(--muted)">${sub}</div><div class="out" id="chal-out" hidden></div><div id="chal-res"></div>${hist.length?`<div class="hist"><div class="eyebrow">Previous challenges</div>${hist.map((h,i)=>`<details ${i===0?'open':''}><summary><span class="pill ${esc(h.verdict)}">${esc(h.verdict)}</span> <span class="mono muted">${esc(h.date)}</span> ${esc((h.summary||'').slice(0,90))}</summary><div class="blk">${renderChal(h,kind,rec,false)}</div></details>`).join('')}</div>`:''}</div>`;
+}
+function renderChal(r,kind,rec,live){
+  const li=a=>Array.isArray(a)&&a.length?`<ul>${a.map(x=>`<li>${esc(typeof x==='string'?x:JSON.stringify(x))}</li>`).join('')}</ul>`:'<span class="muted">none</span>';
+  let h=`<div class="blk"><b>Verdict</b><span class="pill ${esc(r.verdict)}">${esc(r.verdict)}</span> ${esc(r.summary||'')}</div>`;
+  if(kind==='cand'){
+    h+=`<div class="blk"><b>Strongest objection</b>${esc(r.strongest_objection||'')}</div>
+    <div class="blk"><b>What would change the verdict</b>${esc(r.what_would_change_my_mind||'')}</div>
+    <div class="blk"><b>Evidence gaps</b>${li(r.evidence_gaps)}</div>
+    <div class="blk"><b>Hidden strengths</b>${li(r.hidden_strengths)}</div>`;
+    if(r.revised_scores){const t=SCORE_DIMS.reduce((a,[k])=>a+(Number(r.revised_scores[k])||0),0);h+=`<div class="blk"><b>Revised scores</b><span class="mono">${SCORE_DIMS.map(([k])=>k+' '+(Number(r.revised_scores[k])||0)).join(' · ')} = ${t}/40</span> · recommends <span class="pill ${esc(r.recommended_status||'')}">${esc(r.recommended_status||'')}</span>${live&&STATE.canWrite?` <button class="btn ghost sm" id="chal-apply">Apply scores and status</button>`:''}</div>`}
+  }else{
+    h+=`<div class="blk"><b>Missed turns</b>${li(r.missed_turns)}</div>
+    <div class="blk"><b>What would reopen it</b>${esc(r.what_would_reopen||'')}</div>`;
+    if(live&&STATE.canWrite&&r.verdict==='reopen')h+=`<div class="blk"><button class="btn ghost sm" id="chal-reopen">Reopen as digging</button></div>`;
+  }
+  const paths=Array.isArray(r.new_paths)?r.new_paths:[];
+  h+=`<div class="blk"><b>New paths opened</b>${paths.length?paths.map((p,i)=>`<div class="path"><div><div style="font-weight:600">${esc(p.name||'')}</div><div class="muted" style="font-size:13px">${esc(p.why||'')}${p.vector?` <span class="mono">· ${esc(p.vector)}</span>`:''}</div></div>${live&&STATE.canWrite?`<button class="btn ghost sm" data-claim="${i}">Claim territory</button>`:''}</div>`).join(''):'<span class="muted">none</span>'}</div>`;
+  return h;
+}
+function wireChallenge(rec,kind){
+  const go=$('#chal-go');if(!go)return;const stop=$('#chal-stop'),out=$('#chal-out'),res=$('#chal-res');let ctl=null,last=null;
+  stop.addEventListener('click',()=>ctl&&ctl.abort());
+  go.addEventListener('click',async()=>{
+    ctl=new AbortController();go.disabled=true;stop.hidden=false;out.hidden=false;out.textContent='Thinking… (a first use asks your permission; a deep challenge takes a minute or two)';res.innerHTML='';
+    const prompt=kind==='cand'?candPrompt(rec):terrPrompt(rec);
+    try{
+      const r=await sampleFn.json(prompt,{modelTier:'complex',cache:false,signal:ctl.signal,onText:({text})=>{out.textContent=text}});
+      last={...r,date:today()};out.hidden=true;res.innerHTML=renderChal(last,kind,rec,true);
+      if(STATE.canWrite){try{const hist=[last,...(rec.challenges||[])].slice(0,10);await db.collection(kind==='cand'?'candidates':'territories').doc(rec.id).update({challenges:hist});toast('Challenge saved')}catch(e){toast('Saved nothing: '+(e&&e.code||'error'))}}
+      wireChalActions(rec,kind,last);
+    }catch(e){
+      out.hidden=false;
+      const c=e&&e.code;
+      out.textContent=c==='cancelled'?'Stopped.':c==='not_granted'||c==='sampling_disabled'?'Challenge is not available for this viewer.':c==='rate_limited'?'Too many requests right now. Try again in a bit.':c==='invalid_json'?'The challenge came back unstructured. Try again.\n\n'+(e.text||''):'Challenge failed ('+(c||'error')+'). '+(e.text||'');
+    }finally{go.disabled=false;stop.hidden=true}
+  });
+}
+function wireChalActions(rec,kind,r){
+  const ap=$('#chal-apply');if(ap)ap.addEventListener('click',async()=>{ap.disabled=true;try{const sc={};SCORE_DIMS.forEach(([k])=>sc[k]=Math.max(0,Math.min(5,Number(r.revised_scores[k])||0)));const d={scores:sc};if(['lead','vetting','unicorn','killed'].includes(r.recommended_status))d.status=r.recommended_status;if(r.recommended_status==='killed'&&r.strongest_objection)d.kill='Challenge: '+r.strongest_objection;await db.collection('candidates').doc(rec.id).update(d);toast('Applied');closeDrawer()}catch(e){toast('Apply failed');ap.disabled=false}});
+  const ro=$('#chal-reopen');if(ro)ro.addEventListener('click',async()=>{ro.disabled=true;try{const mt=(r.missed_turns||[]).join(' | ');await db.collection('territories').doc(rec.id).update({status:'digging',thread:(mt?('Reopened by challenge: '+mt+' ').slice(0,400):'')+(rec.thread&&rec.thread!=='none'?' Also: '+rec.thread:'')});toast('Reopened');closeDrawer()}catch(e){toast('Reopen failed');ro.disabled=false}});
+  $$('#chal-res [data-claim]').forEach(b=>b.addEventListener('click',async()=>{const p=(r.new_paths||[])[Number(b.dataset.claim)];if(!p)return;b.disabled=true;try{const vec=STATE.vectors.find(v=>v.id===p.vector||v.name===p.vector);await db.collection('territories').doc(slug(p.name)).set({name:p.name,vector:vec?vec.id:'',status:'open',keywords:(p.keywords||''),notes:'Opened by a challenge of '+(kind==='cand'?'candidate':'territory')+' "'+rec.name+'" on '+today()+'. Why: '+(p.why||''),verdict:'',deadend:'',thread:p.first_move||p.why||'',date:today(),updated:today()});b.textContent='Claimed';toast('Territory claimed')}catch(e){toast('Claim failed');b.disabled=false}}));
+}
+const RUBRIC_TXT=()=>'Scoring rubric, 0 to 5 each:\n'+SCORE_DIMS.map(([k,n,d])=>'- '+k+' ('+n+'): '+d).join('\n')+'\nUnicorn bar: total >= 32, no dimension under 3, at least one hiding reason, moat type set.';
+const STANDARD_TXT='We are hunting Windfall Positions: a spot that keeps paying because of where it sits, not what you do from it. The moat must be EXTERNAL (law, contract, physics, geography, history), not skill, hustle or relationships. The window must be datable to a specific recent shift. There must be a specific reason nobody has claimed it. Capital near zero. We want the best of everything, not the best of what one search found. Kill rules: moat is a skill or relationship; window cannot be dated; cannot say why unclaimed; needs real capital or a licence that takes more than weeks; 3+ funded competitors or a listicle of providers exists; it is only here because it was the best thing found.';
+function candPrompt(c){
+  const rec=STATE.recipes.map(r=>r.id+' = '+r.name).join('; ');const vec=STATE.vectors.map(v=>v.id+' = '+v.name).join('; ');
+  return `You are challenging a business-opportunity candidate on behalf of a hunter who is on the SAME side of the table. The goal is truth, not failure: find the strongest objection, name what evidence is missing, say what would change the verdict, and surface any new path the objection opens. Be specific and cold. Do not flatter. Do not pad.\n\n${STANDARD_TXT}\n\n${RUBRIC_TXT()}\n\nHiding-reason ids: ${rec}\nSearch vector ids: ${vec}\n\nCANDIDATE\nName: ${c.name}\nOne line: ${c.oneline}\nMoat type: ${c.moat}\nStatus: ${c.status}\nDated shift: ${c.shift}\nWindow: ${c.window}\nHiding reasons: ${(c.recipes||[]).join(', ')}\nScores: ${JSON.stringify(c.scores||{})} (total ${total(c)}/40)\nEvidence and plays:\n${(c.evidence||'').slice(0,6000)}\nKill reason: ${c.kill||''}\nNext action: ${c.next||''}\n\nReply with ONLY a JSON object of this shape:\n{"verdict":"holds"|"weakened"|"fails","summary":"2-3 sentences","strongest_objection":"the single best argument against it","what_would_change_my_mind":"the specific fact or test that flips the verdict either way","evidence_gaps":["..."],"hidden_strengths":["things that make it stronger than scored, if any"],"revised_scores":{"moat":0,"mandatory":0,"capital":0,"monetize":0,"pull":0,"window":0,"obscurity":0,"durability":0},"recommended_status":"lead"|"vetting"|"unicorn"|"killed","new_paths":[{"name":"a new territory to dig","why":"why the objection points there","vector":"<vector id>","keywords":"comma separated","first_move":"the first concrete thing to check"}]}\nnew_paths may be empty. Only include a path if it is genuinely promising by the standard above.`;
+}
+function terrPrompt(t){
+  const vec=STATE.vectors.map(v=>v.id+' = '+v.name).join('; ');
+  return `You are challenging a hunting territory's verdict on behalf of a hunter on the SAME side of the table. The hunter logged this ground and a verdict. Decide whether the verdict stands or the ground should be reopened, name the unconventional turns that were missed, and surface any new path the dead end points to. Be specific and cold.\n\n${STANDARD_TXT}\n\nSearch vector ids: ${vec}\n\nTERRITORY\nName: ${t.name}\nVector: ${vecName(t.vector)}\nStatus: ${t.status}\nKeywords: ${t.keywords||''}\nRabbit-hole log:\n${(t.notes||'').slice(0,6000)}\nVerdict: ${t.verdict||''}\nDead-end reason: ${t.deadend||''}\nHanging thread: ${t.thread||''}\n\nReply with ONLY a JSON object of this shape:\n{"verdict":"stands"|"reopen","summary":"2-3 sentences","missed_turns":["an unconventional turn the hunter did not take"],"what_would_reopen":"the specific finding that would make this ground fertile","new_paths":[{"name":"a new territory to dig","why":"why this dead end points there","vector":"<vector id>","keywords":"comma separated","first_move":"the first concrete thing to check"}]}\nnew_paths may be empty. Only include a path if it is genuinely promising by the standard above.`;
+}
+
 // ---------- data ----------
 renderAll();
 (async()=>{
   const user=await (window.claude&&claude.use?claude.use('user'):Promise.resolve(null));
   db=await (window.claude&&claude.use?claude.use('db'):Promise.resolve(null));
+  sampleFn=await (window.claude&&claude.use?claude.use('sample'):Promise.resolve(null));
   if(!db){$('#who').innerHTML='<b>offline copy</b><br>ledger not connected';return}
   let can=null;try{can=user?await user.can('data.write'):null}catch(e){}
   STATE.canWrite=can!==false;
