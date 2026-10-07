@@ -171,6 +171,7 @@ section.tab{display:none}section.tab.active{display:block}
     <button role="tab" data-tab="candidates">Candidates <span class="ct" id="ct-cand"></span></button>
     <button role="tab" data-tab="territories">Territories <span class="ct" id="ct-terr"></span></button>
     <button role="tab" data-tab="playbook">Playbook</button>
+    <button role="tab" data-tab="detector">Detector <span class="ct" id="ct-sig"></span></button>
     <button role="tab" data-tab="journal">Journal <span class="ct" id="ct-jour"></span></button>
     <button role="tab" data-tab="rules">Rules</button>
   </nav>
@@ -223,6 +224,15 @@ section.tab{display:none}section.tab.active{display:block}
     <h2 style="margin-top:28px">Scoring rubric</h2>
     <p class="muted" style="margin:4px 0 12px;max-width:68ch">Eight dimensions, zero to five. Unicorn bar: total 32 or more, no dimension under 3, at least one hiding reason named, and the moat is external.</p>
     <div class="rubric" id="rubric"></div>
+  </section>
+
+  <section class="tab" id="tab-detector">
+    <h2>Lead indicators</h2>
+    <p class="muted" style="margin:4px 0 12px;max-width:68ch">Built from the past gold rushes below. The most reliable one across every case: a quiet edit to the channel's own help or policy page, one to four months before any press. The strongest disqualifier: a store with no payment rail.</p>
+    <div class="playbook" id="signals"></div>
+    <h2 style="margin-top:28px">Past flagship moments</h2>
+    <p class="muted" style="margin:4px 0 12px;max-width:68ch">What the capability was, which channel routed demand, what the ranking rewarded, how long the window lasted, and what was visible before it opened.</p>
+    <div class="list" id="cases"></div>
   </section>
 
   <section class="tab" id="tab-journal">
@@ -305,7 +315,7 @@ const SCORE_DIMS=[
  ['durability','Durability','5 = holds for years once taken. 0 = evaporates fast.'],
 ];
 const MOAT_TYPES=['Flagship by default','Scarce asset','Grandfathered entry','Mandatory stop','Exclusive','Default slot','Orphaned customers','Giant needs you','Locked-in customers','Caught the wave','Handed for free','Irreplaceable data','Only road','Legal for you only'];
-const STATE={cands:[],terrs:[],vectors:[],recipes:[],moats:[],journal:[],canWrite:false,db:null,uid:null};
+const STATE={cands:[],terrs:[],vectors:[],recipes:[],moats:[],journal:[],signals:[],cases:[],canWrite:false,db:null,uid:null};
 let db=null,sampleFn=null;
 function lastChal(x){return (x.challenges&&x.challenges[0])||null}
 function slug(t){return String(t).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||('t-'+Date.now())}
@@ -323,7 +333,7 @@ const STOP=new Set(['the','and','for','with','that','this','from','are','was','i
 function overlap(q,t){const a=new Set(tokens(q));if(!a.size)return 0;const b=new Set(tokens([t.name,t.keywords,t.notes,t.verdict].join(' ')));let n=0;a.forEach(w=>{if(b.has(w))n++});return n/a.size}
 
 // ---------- render ----------
-function renderAll(){renderBoard();renderCands();renderTerrs();renderPlaybook();renderJournal();$('#ct-cand').textContent=STATE.cands.length||'';$('#ct-terr').textContent=STATE.terrs.length||'';$('#ct-jour').textContent=STATE.journal.length||'';}
+function renderAll(){renderBoard();renderCands();renderTerrs();renderPlaybook();renderDetector();renderJournal();$('#ct-sig').textContent=STATE.signals.length||'';$('#ct-cand').textContent=STATE.cands.length||'';$('#ct-terr').textContent=STATE.terrs.length||'';$('#ct-jour').textContent=STATE.journal.length||'';}
 function renderBoard(){
   const u=STATE.cands.filter(c=>c.status==='unicorn').length,v=STATE.cands.filter(c=>c.status==='vetting').length,l=STATE.cands.filter(c=>c.status==='lead').length,k=STATE.cands.filter(c=>c.status==='killed').length;
   const ex=STATE.terrs.filter(t=>t.status==='exhausted').length,fe=STATE.terrs.filter(t=>t.status==='fertile').length,dg=STATE.terrs.filter(t=>t.status==='digging'||t.status==='open').length;
@@ -354,6 +364,11 @@ function renderPlaybook(){
   $('#recipes').innerHTML=STATE.recipes.length?STATE.recipes.map(r=>`<div class="pb"><h4>${esc(r.name)}</h4><div class="m">${esc(r.why)}</div><div class="hits">${STATE.cands.filter(c=>(c.recipes||[]).includes(r.id)).length} candidates carry this</div></div>`).join(''):'<div class="empty">No recipes seeded.</div>';
   $('#moats').innerHTML=STATE.moats.length?STATE.moats.map(m=>`<div class="pb"><h4>${esc(m.name)}</h4><div class="m">${esc(m.what)}</div><div class="hits">${STATE.cands.filter(c=>c.moat===m.name).length} candidates</div></div>`).join(''):'<div class="empty">No moat types seeded.</div>';
   $('#rubric').innerHTML=SCORE_DIMS.map(([k,n,d])=>`<div class="rub"><b>${esc(n)}</b>${esc(d)}<span class="mono muted">${k}</span></div>`).join('');
+}
+function renderDetector(){
+  const w={high:'green',medium:'gold',low:'grey'};
+  $('#signals').innerHTML=STATE.signals.length?STATE.signals.map(g=>`<div class="pb"><h4>${esc(g.signal)} <span class="pill ${g.weight==='high'?'fertile':g.weight==='medium'?'unicorn':'exhausted'}">${esc(g.weight)}</span></h4><div class="m">${esc(g.how)}</div><div class="hits">lead time: ${esc(g.lead)}</div></div>`).join(''):'<div class="empty">No signals yet.</div>';
+  $('#cases').innerHTML=STATE.cases.length?STATE.cases.map(c=>`<details class="item"><summary style="cursor:pointer"><span class="t">${esc(c.name)}</span></summary><div class="m" style="margin-top:6px"><b>Capability:</b> ${esc(c.capability)}<br><b>Channel:</b> ${esc(c.channel)}<br><b>What the ranking rewarded:</b> ${esc(c.ranking)}<br><b>Timeline:</b> ${esc(c.timeline)}<br><b>Early earnings:</b> ${esc(c.earnings)}<br><b>Visible before it opened:</b><ul style="margin:4px 0 0;padding-left:18px">${(c.lead_indicators||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${(c.sources||[]).length?`<div class="mono" style="margin-top:6px">${c.sources.map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\//,'').slice(0,60))}</a>`).join(' · ')}</div>`:''}</div></details>`).join(''):'<div class="empty">No cases yet.</div>';
 }
 function renderJournal(){
   const k=$('#jour-kind').value;const rows=STATE.journal.filter(e=>!k||e.kind===k);
@@ -529,7 +544,7 @@ renderAll();
   if(STATE.canWrite){$('#cand-new').hidden=false;$('#terr-new').hidden=false;$('#jour-new').hidden=false}
   $('#who').innerHTML=`<b>${STATE.canWrite?'hunter':'observer'}</b><br>ledger live`;
   const sub=(col,key,order)=>{let q=db.collection(col);if(order)q=q.orderBy(order[0],order[1]);q.onSnapshot(s=>{STATE[key]=s.docs.filter(d=>d.exists).map(d=>({id:d.id,...d.data()}));renderAll()},e=>{$('#who').innerHTML='<b>ledger error</b><br>'+esc(e.code)})};
-  sub('candidates','cands');sub('territories','terrs',['date','desc']);sub('vectors','vectors',['order','asc']);sub('recipes','recipes',['order','asc']);sub('moats','moats',['order','asc']);sub('journal','journal',['date','desc']);
+  sub('candidates','cands');sub('territories','terrs',['date','desc']);sub('vectors','vectors',['order','asc']);sub('recipes','recipes',['order','asc']);sub('moats','moats',['order','asc']);sub('journal','journal',['date','desc']);sub('signals','signals',['order','asc']);sub('cases','cases',['order','asc']);
 })();
 })();
 </script>
