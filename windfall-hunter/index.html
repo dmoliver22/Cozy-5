@@ -234,6 +234,19 @@ section.tab{display:none}section.tab.active{display:block}
     <div class="prose">
       <h2>What we are hunting</h2>
       <p>A <b>Windfall Position</b> is a spot on the board that keeps paying because of where it sits, not what you do from it. The moat lives in law, contracts, physics, geography, or history. A skilled competitor cannot out-work it. Neither could you have. You were there when the door shut.</p>
+      <h2 style="margin-top:20px">The archetype we are actually hunting</h2>
+      <p>The AI coloring book on Etsy, 2022. A new capability made the product free to produce. A marketplace already had buyers searching for it and a ranking that rewards whoever sells first. The people who knew the tool and the people who knew the marketplace never met. Artists who could have done it refused on principle. The idea fit in one sentence, took an afternoon, and the first in became the name of the category. That is the generational one. Everything in this ledger is measured against it.</p>
+      <p>Its signature, in order of importance:</p>
+      <ol>
+        <li><b>The magic is in the idea.</b> One sentence. If it needs a deck, a credential, or a licence, it is not this.</li>
+        <li><b>Something just became free.</b> A capability drop in the last few months collapsed the cost of making a product that people have bought for decades.</li>
+        <li><b>Demand is already queued in a channel.</b> Buyers are searching a marketplace today. The ranking brings them to you. You do not sell; you list.</li>
+        <li><b>Nobody has connected the two.</b> Verified by counting listings, not by assuming. Two tribes that do not read each other's forums.</li>
+        <li><b>Incumbents will not follow fast.</b> They despise the tool, or they are embarrassed by the product, or they are slow.</li>
+        <li><b>First becomes flagship.</b> Reviews, rank, and the category name compound to the first entrant for years after the window closes.</li>
+        <li><b>Zero effort, zero capital.</b> If it takes more than a weekend to ship the first unit, the window is not what we think it is.</li>
+      </ol>
+      <div class="callout">Regulatory positions, credentials, and rosters are the lesser cousins. They stay in the archive because they are real, but they do not get called unicorns. A unicorn here is a coloring-book moment, caught in its first months.</div>
       <h2 style="margin-top:20px">Perfect timing, defined</h2>
       <p>Timing is the gap between when something becomes possible and when it becomes obvious. Perfect timing is measurable: name the enabling change, date it, and show that the people who could exploit it have not noticed while the people who noticed cannot act.</p>
       <div class="callout">A candidate must name all three: the external moat, the dated shift that opened the window, and the specific reason it is still unclaimed. Two of three is a lead. Three of three is vetting. Three of three plus the score bar is a unicorn.</div>
@@ -282,8 +295,8 @@ const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const today=()=>new Date().toISOString().slice(0,10);
 const SCORE_DIMS=[
- ['moat','External moat','Law, contract, physics, geography or history holds it. 0 = pure skill.'],
- ['mandatory','Mandatory flow','Buyers must pass through. 0 = buyers choose freely.'],
+ ['moat','Position moat','Law, contract, physics, geography, history, or being first in a channel whose ranking makes the first the default. 0 = pure skill.'],
+ ['mandatory','Routed demand','Buyers are routed to you by statute or by a channel\'s search and ranking. 0 = you must go find them.'],
  ['capital','Capital lightness','5 = near zero capital. 0 = needs serious money.'],
  ['monetize','Monetization ease','5 = obvious price, pays upfront. 0 = unclear business model.'],
  ['pull','Inbound pull','5 = people already asking to pay. 0 = must be sold cold.'],
@@ -291,7 +304,7 @@ const SCORE_DIMS=[
  ['obscurity','Hiding strength','5 = strong, durable reason nobody has seen it. 0 = obvious to all.'],
  ['durability','Durability','5 = holds for years once taken. 0 = evaporates fast.'],
 ];
-const MOAT_TYPES=['Scarce asset','Grandfathered entry','Mandatory stop','Exclusive','Default slot','Orphaned customers','Giant needs you','Locked-in customers','Caught the wave','Handed for free','Irreplaceable data','Only road','Legal for you only'];
+const MOAT_TYPES=['Flagship by default','Scarce asset','Grandfathered entry','Mandatory stop','Exclusive','Default slot','Orphaned customers','Giant needs you','Locked-in customers','Caught the wave','Handed for free','Irreplaceable data','Only road','Legal for you only'];
 const STATE={cands:[],terrs:[],vectors:[],recipes:[],moats:[],journal:[],canWrite:false,db:null,uid:null};
 let db=null,sampleFn=null;
 function lastChal(x){return (x.challenges&&x.challenges[0])||null}
