@@ -171,6 +171,7 @@ section.tab{display:none}section.tab.active{display:block}
     <button role="tab" data-tab="candidates">Ideas <span class="ct" id="ct-cand"></span></button>
     <button role="tab" data-tab="territories">Ground covered <span class="ct" id="ct-terr"></span></button>
     <button role="tab" data-tab="playbook">Where to look</button>
+    <button role="tab" data-tab="shelves">Shelves <span class="ct" id="ct-shelf"></span></button>
     <button role="tab" data-tab="detector">Early warnings <span class="ct" id="ct-sig"></span></button>
     <button role="tab" data-tab="journal">Journal <span class="ct" id="ct-jour"></span></button>
     <button role="tab" data-tab="rules">How this works</button>
@@ -230,6 +231,15 @@ section.tab{display:none}section.tab.active{display:block}
     <div class="rubric" id="rubric"></div>
   </section>
 
+  <section class="tab" id="tab-shelves">
+    <h2>Shelves: where buyers already are</h2>
+    <p class="muted" style="margin:4px 0 12px;max-width:68ch">A shelf is a store with a search box, a price field or a payout, and a ranking that rewards whoever is there first. From now on the hunt starts here: watch each shelf for a new category, format or rule, and look for the empty cell. A shelf marked "cannot charge" is kept so nobody digs it twice.</p>
+    <div class="toolbar">
+      <input id="shelf-q" placeholder="Search shelves…">
+      <select id="shelf-pays"><option value="">Any way to get paid</option><option value="yes">Can charge or earn</option><option value="no">Cannot charge</option></select>
+    </div>
+    <div class="scroll card" style="padding:0"><table class="tbl" id="shelf-tbl"><thead><tr><th>Shelf</th><th>What sells and how you get paid</th><th>How buyers find things</th><th>Newest change</th><th>Empty-cell signal</th></tr></thead><tbody></tbody></table></div>
+  </section>
   <section class="tab" id="tab-detector">
     <h2>Early warnings: signs a wave is coming</h2>
     <p class="muted" style="margin:4px 0 12px;max-width:68ch">Listed in order of how far ahead each one shows up. The list was rebuilt after testing it against Meta's Muse launch: the signs that showed up months early were about what the company was doing (a hit open-source project it copied, a code name leaking, a new developer kit posted to its GitHub, a court ruling). The signs on the app store itself showed up one day early. So: watch the company, then confirm on the store. A signal with a gold "Firing now" box is live today; the scan is re-run every Monday.</p>
@@ -381,7 +391,7 @@ const LABELS={unicorn:'Unicorn',vetting:'Being checked',lead:'Lead',killed:'Drop
 function lab(s){return LABELS[s]||s||''}
 function barFail(c){const sc=k=>Number(c.scores&&c.scores[k])||0;if(sc('first')<BAR.first)return 'not clearly first yet (needs 4 or 5, counted)';if(sc('window')<BAR.window)return 'the door did not just open (needs 3 or more)';if(total(c)<BAR.total)return 'total '+total(c)+'/40, needs '+BAR.total;if(!(c.recipes||[]).length)return 'no reason named for why nobody has done it';return ''}
 const MOAT_TYPES=['Flagship by default','Scarce asset','Grandfathered entry','Mandatory stop','Exclusive','Default slot','Orphaned customers','Giant needs you','Locked-in customers','Caught the wave','Handed for free','Irreplaceable data','Only road','Legal for you only'];
-const STATE={cands:[],terrs:[],vectors:[],recipes:[],moats:[],journal:[],signals:[],cases:[],waves:[],canWrite:false,db:null,uid:null};
+const STATE={cands:[],terrs:[],vectors:[],recipes:[],moats:[],journal:[],signals:[],cases:[],waves:[],shelves:[],canWrite:false,db:null,uid:null};
 let db=null,sampleFn=null;
 function lastChal(x){return (x.challenges&&x.challenges[0])||null}
 function slug(t){return String(t).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||('t-'+Date.now())}
@@ -399,7 +409,7 @@ const STOP=new Set(['the','and','for','with','that','this','from','are','was','i
 function overlap(q,t){const a=new Set(tokens(q));if(!a.size)return 0;const b=new Set(tokens([t.name,t.keywords,t.notes,t.verdict].join(' ')));let n=0;a.forEach(w=>{if(b.has(w))n++});return n/a.size}
 
 // ---------- render ----------
-function renderAll(){renderBoard();renderCands();renderTerrs();renderPlaybook();renderDetector();renderJournal();$('#ct-sig').textContent=STATE.signals.length||'';$('#ct-cand').textContent=STATE.cands.length||'';$('#ct-terr').textContent=STATE.terrs.length||'';$('#ct-jour').textContent=STATE.journal.length||'';}
+function renderAll(){renderBoard();renderCands();renderTerrs();renderPlaybook();renderDetector();renderShelves();renderJournal();$('#ct-shelf').textContent=STATE.shelves.length||'';$('#ct-sig').textContent=STATE.signals.length||'';$('#ct-cand').textContent=STATE.cands.length||'';$('#ct-terr').textContent=STATE.terrs.length||'';$('#ct-jour').textContent=STATE.journal.length||'';}
 function renderBoard(){
   const u=STATE.cands.filter(c=>c.status==='unicorn').length,v=STATE.cands.filter(c=>c.status==='vetting').length,l=STATE.cands.filter(c=>c.status==='lead').length,k=STATE.cands.filter(c=>c.status==='killed').length;
   const ex=STATE.terrs.filter(t=>t.status==='exhausted').length,fe=STATE.terrs.filter(t=>t.status==='fertile').length,dg=STATE.terrs.filter(t=>t.status==='digging'||t.status==='open').length;
@@ -439,12 +449,19 @@ function renderDetector(){
   $('#waves').innerHTML=STATE.waves.length?STATE.waves.map(w=>`<details class="item accent" ${w.live?'open':''}><summary style="cursor:pointer"><span class="t">${esc(w.name)}</span> <span class="mono muted">${esc(w.date||'')}</span> <span class="pill tag">${esc(w.scale||'')}</span></summary><div class="m" style="margin-top:8px">${(w.behaviors||[]).map(b=>`<div style="margin-bottom:8px"><b>${esc(b.behavior)}</b><br><span class="muted">Nobody has made:</span> ${esc(b.missing)}<br><span class="muted">What we counted:</span> ${esc(b.count||'')}${b.rail?`<br><span class="muted">How it pays:</span> ${esc(b.rail)}`:''}</div>`).join('')}${w.notes?`<div class="muted" style="margin-top:6px">${esc(w.notes)}</div>`:''}</div></details>`).join(''):'<div class="empty">No wave mapped yet.</div>';
   $('#cases').innerHTML=STATE.cases.length?STATE.cases.map(c=>`<details class="item"><summary style="cursor:pointer"><span class="t">${esc(c.name)}</span></summary><div class="m" style="margin-top:6px"><b>The new thing:</b> ${esc(c.capability)}<br><b>Where the buyers were:</b> ${esc(c.channel)}<br><b>What being first got you:</b> ${esc(c.ranking)}<br><b>Timeline:</b> ${esc(c.timeline)}<br><b>Early money:</b> ${esc(c.earnings)}<br><b>What you could have seen coming:</b><ul style="margin:4px 0 0;padding-left:18px">${(c.lead_indicators||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${(c.lag_table||[]).length?`<div style="margin-top:8px"><b>Day by day, what happened after launch:</b><table style="width:100%;border-collapse:collapse;margin-top:4px;font-size:12px">${c.lag_table.map(r=>`<tr><td class="mono" style="padding:2px 6px 2px 0;vertical-align:top;white-space:nowrap">day ${esc(String(r.day))}</td><td style="padding:2px 6px 2px 0;vertical-align:top">${esc(r.milestone)}</td><td class="muted" style="padding:2px 0;vertical-align:top">${esc(r.evidence||'')}</td></tr>`).join('')}</table></div>`:''}${c.lesson?`<div style="margin-top:8px"><b>Lesson:</b> ${esc(c.lesson)}</div>`:''}${(c.sources||[]).length?`<div class="mono" style="margin-top:6px">${c.sources.map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\//,'').slice(0,60))}</a>`).join(' · ')}</div>`:''}</div></details>`).join(''):'<div class="empty">No cases yet.</div>';
 }
+function renderShelves(){
+  const q=($('#shelf-q').value||'').toLowerCase(),pz=$('#shelf-pays').value;
+  const cant=x=>/cannot charge|no way to get paid|points only/i.test((x.pays||''));
+  const rows=STATE.shelves.filter(x=>(!pz||(pz==='no'?cant(x):!cant(x)))&&(!q||[x.name,x.sells,x.pays,x.notes,x.newest_change,x.finds].join(' ').toLowerCase().includes(q))).sort((a,b)=>String(b.newest_change_date||'').localeCompare(String(a.newest_change_date||'')));
+  $('#shelf-tbl tbody').innerHTML=rows.length?rows.map(x=>`<tr><td><div class="name">${x.url?`<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.name)}</a>`:esc(x.name)}</div>${x.watch_url?`<div class="sub"><a href="${esc(x.watch_url)}" target="_blank" rel="noopener">where to watch</a></div>`:''}${cant(x)?'<div style="margin-top:4px"><span class="pill killed">cannot charge</span></div>':''}</td><td><div class="sub">${esc(x.sells||'')}</div><div style="margin-top:4px">${esc(x.pays||'')}${x.fee?` <span class="muted">(${esc(x.fee)})</span>`:''}</div></td><td class="sub">${esc(x.finds||'')}${x.ranking?`<br><span class="muted">Ranking:</span> ${esc(x.ranking)}`:''}${x.first_keeps_rank?`<br><span class="muted">First keeps rank:</span> ${esc(x.first_keeps_rank)}`:''}</td><td class="sub"><span class="mono">${esc(x.newest_change_date||'')}</span><br>${esc(x.newest_change||'')}</td><td class="sub">${esc(x.empty_signal||'')}${x.notes?`<div class="muted" style="margin-top:4px">${esc(x.notes)}</div>`:''}</td></tr>`).join(''):`<tr><td colspan="5"><div class="empty">No shelves yet. The registry fills in from the shelf hunters.</div></td></tr>`;
+}
 function renderJournal(){
   const k=$('#jour-kind').value;const rows=STATE.journal.filter(e=>!k||e.kind===k);
   $('#jour-list').innerHTML=rows.length?rows.map(e=>`<div class="item ${e.kind==='decision'?'accent':e.kind==='insight'?'green':''} row" data-jour="${esc(e.id)}" style="cursor:pointer"><div class="t">${esc(e.title)} <span class="pill tag">${esc(e.kind)}</span> <span class="mono muted">${esc(e.date)}</span></div><div class="m" style="white-space:pre-wrap">${esc(e.body)}</div></div>`).join(''):`<div class="empty">No journal entries.</div>`;
 }
 ['#cand-q','#cand-status','#cand-moat'].forEach(s=>$(s).addEventListener('input',renderCands));
 ['#terr-q','#terr-status','#terr-vector'].forEach(s=>$(s).addEventListener('input',renderTerrs));
+['#shelf-q','#shelf-pays'].forEach(s=>$(s).addEventListener('input',renderShelves));
 $('#jour-kind').addEventListener('input',renderJournal);
 $('#terr-check').addEventListener('input',()=>{
   const q=$('#terr-check').value;const out=$('#terr-check-out');if(!q.trim()){out.innerHTML='';return}
@@ -614,7 +631,7 @@ renderAll();
   if(STATE.canWrite){$('#cand-new').hidden=false;$('#terr-new').hidden=false;$('#jour-new').hidden=false}
   $('#who').innerHTML=`<b>${STATE.canWrite?'hunter':'observer'}</b><br>ledger live`;
   const sub=(col,key,order)=>{let q=db.collection(col);if(order)q=q.orderBy(order[0],order[1]);q.onSnapshot(s=>{STATE[key]=s.docs.filter(d=>d.exists).map(d=>({id:d.id,...d.data()}));renderAll()},e=>{$('#who').innerHTML='<b>ledger error</b><br>'+esc(e.code)})};
-  sub('candidates','cands');sub('territories','terrs',['date','desc']);sub('vectors','vectors',['order','asc']);sub('recipes','recipes',['order','asc']);sub('moats','moats',['order','asc']);sub('journal','journal',['date','desc']);sub('signals','signals',['order','asc']);sub('cases','cases',['order','asc']);sub('waves','waves',['date','desc']);
+  sub('candidates','cands');sub('territories','terrs',['date','desc']);sub('vectors','vectors',['order','asc']);sub('recipes','recipes',['order','asc']);sub('moats','moats',['order','asc']);sub('journal','journal',['date','desc']);sub('signals','signals',['order','asc']);sub('cases','cases',['order','asc']);sub('waves','waves',['date','desc']);sub('shelves','shelves',['name','asc']);
 })();
 })();
 </script>

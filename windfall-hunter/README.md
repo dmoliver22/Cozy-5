@@ -17,6 +17,7 @@ and which carry a specific reason nobody has claimed them yet.
 | `candidates`  | ideas, scored on eight plain questions (first, people come looking, costs nothing, easy to get paid, they come to you, door just opened, reason nobody has done it, first keeps paying), with status |
 | `vectors`     | search methods (where windfalls hide) |
 | `recipes`     | reasons nobody has found it yet |
+| `shelves`     | the shelf registry: stores with a search box and a price field, what sells, how you get paid, ranking rule, newest change with date, where to watch, empty-cell signal |
 | `moats`       | kinds of head start (optional; being first is the gate) |
 | `journal`     | cycle logs, insights, decisions, pivots |
 
