@@ -1,6 +1,6 @@
 # Windfall Hunter
 
-Operating system for hunting "windfall positions": opportunities whose moat is external
+Operating system for hunting "windfall positions": ideas where being first is the whole trick
 (law, contract, physics, geography, history), whose window just opened on a dateable shift,
 and which carry a specific reason nobody has claimed them yet.
 
@@ -14,10 +14,10 @@ and which carry a specific reason nobody has claimed them yet.
 | collection    | purpose |
 |---------------|---------|
 | `territories` | archive of ground already dug: vector, keywords, rabbit-hole log, verdict, dead-end reason, hanging thread |
-| `candidates`  | scored opportunities with moat type, dated shift, hiding reasons, 8-dimension score, status |
+| `candidates`  | ideas, scored on eight plain questions (first, people come looking, costs nothing, easy to get paid, they come to you, door just opened, reason nobody has done it, first keeps paying), with status |
 | `vectors`     | search methods (where windfalls hide) |
 | `recipes`     | reasons nobody has found it yet |
-| `moats`       | the moat types that count as windfalls |
+| `moats`       | kinds of head start (optional; being first is the gate) |
 | `journal`     | cycle logs, insights, decisions, pivots |
 
-Unicorn bar: score total >= 32/40, no dimension under 3, at least one hiding reason, moat type set.
+Unicorn bar: "Are you first?" 4 or 5 (counted), "Did the door just open?" 3 or more, total 30 or more, one reason named for why nobody has done it, and a survived challenge. Score key `first` replaced `moat` on Oct 9 2026.

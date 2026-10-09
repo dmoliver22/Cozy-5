@@ -159,32 +159,32 @@ section.tab{display:none}section.tab.active{display:block}
 <div class="wrap">
   <header class="top">
     <div>
-      <div class="eyebrow">Hunting ledger · windfall positions</div>
+      <div class="eyebrow">The hunt for ideas where being first is the whole trick</div>
       <h1>Windfall Hunter</h1>
-      <p class="sub">Find positions where the moat is external, the window just opened, and there is a specific reason nobody else has noticed. Archive every territory so nothing gets dug twice. Only unicorns leave this page.</p>
+      <p class="sub">We look for ideas where something just changed, nobody has walked through the new door yet, it would take a weekend and no money, and the first one through becomes the name people remember. Everything already searched is archived here so nothing gets dug twice. Only the real ones get called unicorns.</p>
     </div>
     <div class="who" id="who">connecting to the ledger…</div>
   </header>
 
   <nav class="tabs" role="tablist">
     <button role="tab" aria-selected="true" data-tab="board">Board</button>
-    <button role="tab" data-tab="candidates">Candidates <span class="ct" id="ct-cand"></span></button>
-    <button role="tab" data-tab="territories">Territories <span class="ct" id="ct-terr"></span></button>
-    <button role="tab" data-tab="playbook">Playbook</button>
-    <button role="tab" data-tab="detector">Detector <span class="ct" id="ct-sig"></span></button>
+    <button role="tab" data-tab="candidates">Ideas <span class="ct" id="ct-cand"></span></button>
+    <button role="tab" data-tab="territories">Ground covered <span class="ct" id="ct-terr"></span></button>
+    <button role="tab" data-tab="playbook">Where to look</button>
+    <button role="tab" data-tab="detector">Early warnings <span class="ct" id="ct-sig"></span></button>
     <button role="tab" data-tab="journal">Journal <span class="ct" id="ct-jour"></span></button>
-    <button role="tab" data-tab="rules">Rules</button>
+    <button role="tab" data-tab="rules">How this works</button>
   </nav>
 
   <section class="tab active" id="tab-board">
     <div class="grid tiles" id="tiles"></div>
     <div class="grid two" style="margin-top:14px">
       <div>
-        <div class="card"><h3>Ship or kill <span class="eyebrow">windows closing</span></h3><div class="list" id="board-clock"></div></div>
-        <div class="card" style="margin-top:14px"><h3>Unicorns and what is being vetted <span class="eyebrow">by score</span></h3><div class="list" id="board-cands"></div></div>
+        <div class="card"><h3>Clock is ticking <span class="eyebrow">ship it or drop it by the date</span></h3><div class="list" id="board-clock"></div></div>
+        <div class="card" style="margin-top:14px"><h3>Best ideas right now <span class="eyebrow">unicorns and ideas being checked, by score</span></h3><div class="list" id="board-cands"></div></div>
       </div>
       <div>
-        <div class="card"><h3>Threads left hanging <span class="eyebrow">pull next</span></h3><div class="list" id="board-threads"></div></div>
+        <div class="card"><h3>Loose threads <span class="eyebrow">pull these next</span></h3><div class="list" id="board-threads"></div></div>
         <div class="card" style="margin-top:14px"><h3>Latest from the journal</h3><div class="list" id="board-journal"></div></div>
       </div>
     </div>
@@ -192,52 +192,53 @@ section.tab{display:none}section.tab.active{display:block}
 
   <section class="tab" id="tab-candidates">
     <div class="toolbar">
-      <input id="cand-q" placeholder="Search candidates…">
-      <select id="cand-status"><option value="">Any status</option><option value="unicorn">Unicorn</option><option value="vetting">Vetting</option><option value="lead">Lead</option><option value="killed">Killed</option></select>
-      <select id="cand-moat"><option value="">Any moat</option></select>
-      <button class="btn" id="cand-new" hidden>+ Candidate</button>
+      <input id="cand-q" placeholder="Search ideas…">
+      <select id="cand-status"><option value="">Any status</option><option value="unicorn">Unicorn</option><option value="vetting">Being checked</option><option value="lead">Lead</option><option value="killed">Dropped</option></select>
+      <select id="cand-moat"><option value="">Any kind of head start</option></select>
+      <button class="btn" id="cand-new" hidden>+ Idea</button>
     </div>
-    <div class="scroll card" style="padding:0"><table class="tbl" id="cand-tbl"><thead><tr><th>Candidate</th><th>Moat</th><th>Window</th><th>Score</th><th>Status</th></tr></thead><tbody></tbody></table></div>
+    <div class="scroll card" style="padding:0"><table class="tbl" id="cand-tbl"><thead><tr><th>Idea</th><th>Head start</th><th>How long the door stays open</th><th>Score</th><th>Status</th></tr></thead><tbody></tbody></table></div>
   </section>
 
   <section class="tab" id="tab-territories">
     <div class="card" style="margin-bottom:14px">
-      <h3>Already dug? <span class="eyebrow">overlap check</span></h3>
-      <input id="terr-check" placeholder="Type a territory, keyword, industry, regulation… before you start digging">
+      <h3>Has this been searched already? <span class="eyebrow">check before you dig</span></h3>
+      <input id="terr-check" placeholder="Type an idea, a keyword, an industry, a rule… and see if we already covered it">
       <div id="terr-check-out" class="list" style="margin-top:10px"></div>
     </div>
     <div class="toolbar">
       <input id="terr-q" placeholder="Search the archive…">
-      <select id="terr-status"><option value="">Any status</option><option value="open">Open</option><option value="digging">Digging</option><option value="fertile">Fertile</option><option value="exhausted">Exhausted</option></select>
-      <select id="terr-vector"><option value="">Any vector</option></select>
-      <button class="btn" id="terr-new" hidden>+ Territory</button>
+      <select id="terr-status"><option value="">Any status</option><option value="open">Open</option><option value="digging">Being dug</option><option value="fertile">Promising</option><option value="exhausted">Fully searched</option></select>
+      <select id="terr-vector"><option value="">Any way in</option></select>
+      <button class="btn" id="terr-new" hidden>+ Ground</button>
     </div>
-    <div class="scroll card" style="padding:0"><table class="tbl" id="terr-tbl"><thead><tr><th>Territory</th><th>Vector</th><th>Verdict</th><th>Status</th><th>Dug</th></tr></thead><tbody></tbody></table></div>
+    <div class="scroll card" style="padding:0"><table class="tbl" id="terr-tbl"><thead><tr><th>Ground</th><th>Way in</th><th>What we found</th><th>Status</th><th>Date</th></tr></thead><tbody></tbody></table></div>
   </section>
 
   <section class="tab" id="tab-playbook">
-    <h2>Search vectors</h2>
-    <p class="muted" style="margin:4px 0 12px;max-width:68ch">Each vector is a place windfalls hide. Hit counts come from the territory archive, so the playbook learns which doors pay.</p>
+    <h2>Ways in: where first-mover ideas hide</h2>
+    <p class="muted" style="margin:4px 0 12px;max-width:68ch">Each one is a kind of place where an idea can sit unclaimed. The counts come from the ground we have covered, so over time this page learns which doors actually pay.</p>
     <div class="playbook" id="vectors"></div>
-    <h2 style="margin-top:28px">Why nobody found it yet</h2>
-    <p class="muted" style="margin:4px 0 12px;max-width:68ch">A candidate without one of these is probably already taken. The reason it is hidden is half the recipe.</p>
+    <h2 style="margin-top:28px">Why nobody has done it yet</h2>
+    <p class="muted" style="margin:4px 0 12px;max-width:68ch">An idea with none of these is probably already taken. The reason it is still sitting there is half the idea.</p>
     <div class="playbook" id="recipes"></div>
-    <h2 style="margin-top:28px">Moat types that count</h2>
+    <h2 style="margin-top:28px">Kinds of head start <span class="eyebrow">nice to have, no longer required</span></h2>
+    <p class="muted" style="margin:4px 0 12px;max-width:68ch">What used to be called the "moat": whatever keeps the first one first after others arrive. Being first is the point now; this is the bonus.</p>
     <div class="playbook" id="moats"></div>
-    <h2 style="margin-top:28px">Scoring rubric</h2>
-    <p class="muted" style="margin:4px 0 12px;max-width:68ch">Eight dimensions, zero to five. Unicorn bar: total 32 or more, no dimension under 3, at least one hiding reason named, and the moat is external.</p>
+    <h2 style="margin-top:28px">How an idea is scored</h2>
+    <p class="muted" style="margin:4px 0 12px;max-width:68ch">Eight questions, each scored 0 to 5. To be called a unicorn: "Are you first?" must be 4 or 5, "Did the door just open?" must be 3 or more, the total must be 30 or more, and one reason must be named for why nobody has done it.</p>
     <div class="rubric" id="rubric"></div>
   </section>
 
   <section class="tab" id="tab-detector">
-    <h2>Lead indicators</h2>
-    <p class="muted" style="margin:4px 0 12px;max-width:68ch">Built from the past gold rushes below. The most reliable one across every case: a quiet edit to the channel's own help or policy page, one to four months before any press. The strongest disqualifier: a store with no payment rail.</p>
+    <h2>Early warnings: signs a wave is coming</h2>
+    <p class="muted" style="margin:4px 0 12px;max-width:68ch">Listed in order of how far ahead each one shows up. The list was rebuilt after testing it against Meta's Muse launch: the signs that showed up months early were about what the company was doing (a hit open-source project it copied, a code name leaking, a new developer kit posted to its GitHub, a court ruling). The signs on the app store itself showed up one day early. So: watch the company, then confirm on the store.</p>
     <div class="playbook" id="signals"></div>
-    <h2 style="margin-top:28px">Behavior maps of live waves</h2>
-    <p class="muted" style="margin:4px 0 12px;max-width:68ch">The method that found the open ground in cycle 3. For a capability tens of millions just acquired, list what people are visibly doing in week three or four, and for each behavior name the scoreboard, status table, log, guide or ritual nobody has made, with the count proving it. Aggregation closes in days; adjudication stays open for weeks.</p>
+    <h2 style="margin-top:28px">What people are doing with it <span class="eyebrow">live waves</span></h2>
+    <p class="muted" style="margin:4px 0 12px;max-width:68ch">When millions of people get a new thing at once, they start doing things with it, and each new behavior needs a page nobody has made yet: a "which companies accept it" table, a "what went wrong" log, a "which one should I buy" guide. Simple lists get made within days. Pages that need judgement stay unmade for weeks. That gap is where we look.</p>
     <div class="list" id="waves"></div>
-    <h2 style="margin-top:28px">Past flagship moments</h2>
-    <p class="muted" style="margin:4px 0 12px;max-width:68ch">What the capability was, which channel routed demand, what the ranking rewarded, how long the window lasted, and what was visible before it opened.</p>
+    <h2 style="margin-top:28px">Past gold rushes <span class="eyebrow">and what was visible before each one</span></h2>
+    <p class="muted" style="margin:4px 0 12px;max-width:68ch">What the new thing was, where the buyers already were, what being first got you, how long the window stayed open, and what you could have seen coming.</p>
     <div class="list" id="cases"></div>
   </section>
 
@@ -248,80 +249,104 @@ section.tab{display:none}section.tab.active{display:block}
 
   <section class="tab" id="tab-rules">
     <div class="prose">
-      <h2>What we are hunting</h2>
-      <p>A <b>Windfall Position</b> is a spot on the board that keeps paying because of where it sits, not what you do from it. The moat lives in law, contracts, physics, geography, or history. A skilled competitor cannot out-work it. Neither could you have. You were there when the door shut.</p>
-      <h2 style="margin-top:20px">The archetype we are actually hunting</h2>
-      <p>The AI coloring book on Etsy, 2022. A new capability made the product free to produce. A marketplace already had buyers searching for it and a ranking that rewards whoever sells first. The people who knew the tool and the people who knew the marketplace never met. Artists who could have done it refused on principle. The idea fit in one sentence, took an afternoon, and the first in became the name of the category. That is the generational one. Everything in this ledger is measured against it.</p>
-      <p>Its signature, in order of importance:</p>
+      <h2>What we are hunting, in one breath</h2>
+      <p>A <b>Windfall Position</b> is an idea where being first is the whole trick. Something just changed. Nobody has walked through the new door yet. It would take you a weekend and no money. And the first one through becomes the name people remember. The example we measure everything against is the first AI coloring books on Etsy in 2022. The idea was the magic. The people who did it were not smarter than you. They were just there first.</p>
+      <div class="callout">Being first is the point. A head start that keeps others out afterwards (what we used to call the "moat") is nice, but it is no longer required. Jobs, licences and government rosters stay in the archive because they are real, but they are not what we call unicorns.</div>
+
+      <h2 style="margin-top:20px">Plain-English glossary</h2>
+      <ul>
+        <li><b>First.</b> Nobody has made this yet. Not "nobody has made it well". Counted, not guessed: the searches we ran and what came back.</li>
+        <li><b>The door.</b> The change that made the idea possible: a new tool, a new store, a new rule, a big launch. "Did the door just open?" means that change happened in the last few months.</li>
+        <li><b>The window.</b> How long until the door is crowded, or a big company ships its own version. After a big-company launch it is weeks, not months.</li>
+        <li><b>People come looking.</b> There is a place (a store search, Google, an app store) where people already type the thing you would make, and it would show them yours. You do not sell. You list.</li>
+        <li><b>A way to get paid.</b> An obvious price, a storefront, an affiliate link, a subscription. If there is no way to charge, it is a hobby.</li>
+        <li><b>Head start.</b> Whatever keeps the first one first after others arrive: reviews, rank, the category name. A bonus.</li>
+        <li><b>Why nobody has done it.</b> The specific reason the idea is still sitting there. It looks like a toy. It is embarrassing. The people who know the tool and the people who know the market never talk. It is buried in a document nobody reads. With no reason, assume it is taken.</li>
+        <li><b>Idea.</b> One thing we might build. <b>Lead</b> = worth a look. <b>Being checked</b> = being counted and challenged. <b>Unicorn</b> = clears the bar and survived a challenge. <b>Dropped</b> = checked and failed, with the reason written down so nobody repeats it.</li>
+        <li><b>Ground.</b> A place we searched. <b>Promising</b> = ideas came out of it. <b>Fully searched</b> = nothing there, with the reason. Logged so nobody digs it twice.</li>
+        <li><b>Way in.</b> A kind of place where first-mover ideas hide. The list is on "Where to look".</li>
+        <li><b>Wave.</b> Millions of people getting a new thing at once. Waves create new behaviors, and each new behavior needs a page, a table or a guide that nobody has made yet.</li>
+        <li><b>Early warning.</b> A sign a wave is coming before it is news.</li>
+        <li><b>Challenge.</b> The button on every record. A second pair of eyes on our side: the strongest objection, what is missing, what would flip the verdict, and what new path opens.</li>
+      </ul>
+
+      <h2 style="margin-top:20px">The seven marks of the real thing</h2>
       <ol>
-        <li><b>The magic is in the idea.</b> One sentence. If it needs a deck, a credential, or a licence, it is not this.</li>
-        <li><b>Something just became free.</b> A capability drop in the last few months collapsed the cost of making a product that people have bought for decades.</li>
-        <li><b>Demand is already queued in a channel.</b> Buyers are searching a marketplace today. The ranking brings them to you. You do not sell; you list.</li>
-        <li><b>Nobody has connected the two.</b> Verified by counting listings, not by assuming. Two tribes that do not read each other's forums.</li>
-        <li><b>Incumbents will not follow fast.</b> They despise the tool, or they are embarrassed by the product, or they are slow.</li>
-        <li><b>First becomes flagship.</b> Reviews, rank, and the category name compound to the first entrant for years after the window closes.</li>
-        <li><b>Zero effort, zero capital.</b> If it takes more than a weekend to ship the first unit, the window is not what we think it is.</li>
+        <li><b>The idea fits in one sentence.</b> If it needs a pitch deck, a licence or a qualification, it is not this.</li>
+        <li><b>Something just made it cheap or possible.</b> A new tool, a new feature, a new store, a new rule, in the last few months. With a date.</li>
+        <li><b>People are already looking for it</b> somewhere that would show them yours.</li>
+        <li><b>You are first, and you counted.</b> Store listings, Google, Reddit, GitHub, Etsy, the trade press. Not a feeling.</li>
+        <li><b>There is a reason nobody has done it.</b> Usually: it looks silly, it looks small, or the two groups who would need to meet never do.</li>
+        <li><b>It takes a weekend and no money.</b></li>
+        <li><b>The first one in keeps paying.</b> Reviews, rank, the category name. The bonus, not the requirement.</li>
       </ol>
-      <div class="callout">Regulatory positions, credentials, and rosters are the lesser cousins. They stay in the archive because they are real, but they do not get called unicorns. A unicorn here is a coloring-book moment, caught in its first months.</div>
-      <h2 style="margin-top:20px">Perfect timing, defined</h2>
-      <p>Timing is the gap between when something becomes possible and when it becomes obvious. Perfect timing is measurable: name the enabling change, date it, and show that the people who could exploit it have not noticed while the people who noticed cannot act.</p>
-      <div class="callout">A candidate must name all three: the external moat, the dated shift that opened the window, and the specific reason it is still unclaimed. Two of three is a lead. Three of three is vetting. Three of three plus the score bar is a unicorn.</div>
-      <h2 style="margin-top:20px">Operating loop</h2>
+
+      <h2 style="margin-top:20px">How an idea is scored</h2>
+      <p>Eight questions, each 0 to 5: Are you first? Will people come looking? Costs nothing to start? Easy to get paid? Do they come to you? Did the door just open? Is there a reason nobody has done it? Does being first keep paying?</p>
+      <div class="callout">To be called a unicorn: "Are you first?" must be 4 or 5. "Did the door just open?" must be 3 or more. The total must be 30 or more. One reason must be named for why nobody has done it. And it must have survived a challenge. Never round up. If a score is low, write why.</div>
+
+      <h2 style="margin-top:20px">How the hunt runs</h2>
       <ol>
-        <li><b>Check the archive first.</b> Run the overlap check. If the territory is exhausted, do not dig. If it is fertile with a hanging thread, pull that thread instead.</li>
-        <li><b>Claim a territory.</b> Log it as digging with the vector you came in through, before researching. This is what prevents duplicate work across sessions.</li>
-        <li><b>Follow the rabbit hole, log the turns.</b> Unconventional turns are the point: read the regulation itself, the procurement award, the obituary, the shutdown notice, the standards appendix. Record each twist in the territory notes.</li>
-        <li><b>Log the verdict even when it is nothing.</b> An exhausted territory with a dead-end reason is a result. It saves the next hunter a day.</li>
-        <li><b>Score candidates coldly.</b> Fill every dimension. If any is under 3, say why in the kill reason or the next action. Never round up.</li>
-        <li><b>Leave a hanging thread.</b> Every territory ends with the next thread to pull, or an explicit "none".</li>
-        <li><b>Journal the cycle.</b> What was tried, what moved, what the gut says next.</li>
+        <li><b>Check the archive first.</b> Type the idea into "Has this been searched already?". If the ground is fully searched, do not dig it again. If it is promising with a loose thread, pull that thread.</li>
+        <li><b>Log the ground before digging.</b> Name it, say which way in you took, mark it "being dug". This is what stops two sessions doing the same work.</li>
+        <li><b>Follow the rabbit hole and write down the turns.</b> Read the actual rule, the actual store page, the actual code repo, the obituary, the shutdown notice. Each twist goes in the notes.</li>
+        <li><b>Count before you believe.</b> "Nobody has made this" is a number: the search you ran and what came back. Count on the surface where that market's builders actually publish, not just where it is easy to count.</li>
+        <li><b>Log the result even when it is nothing.</b> A dead end with the reason written down saves the next hunter a day.</li>
+        <li><b>Score coldly, then press Challenge.</b> Nothing is called a unicorn before a challenge.</li>
+        <li><b>Set a date.</b> Ship it or drop it by a day written down. After a big-company launch that date is inside two weeks.</li>
+        <li><b>Leave a loose thread, then write the journal.</b> What was tried, what moved, what the gut says next.</li>
       </ol>
+
       <h2 style="margin-top:20px">The standard</h2>
-      <p>We are looking for the best of everything, not the best of what a search happened to turn up. A mediocre find logged as a candidate is worse than an honest dead end, because it pulls attention from the hunt. If a path is wrong, stop walking it. Do not keep following a vector to have something to show. Log the territory as exhausted, write down why, and turn.</p>
-      <p>Every record can be challenged with a button. The challenge is not an attempt to fail it. It is a second pair of eyes on the same side of the table: what is the strongest objection, what evidence is missing, what would change the verdict, and what new path does the objection open. A challenge that reopens a dead end or spawns a new territory has done its job as much as one that confirms a unicorn.</p>
-      <h2 style="margin-top:20px">The behavior map</h2>
+      <p>The best of everything, not the best of what one search happened to find. A so-so idea logged as a candidate is worse than an honest dead end, because it steals attention from the hunt. If a path is wrong, stop walking it, write down why, and turn.</p>
+      <p>The Challenge button is not there to fail things. It is a second pair of eyes on the same side of the table. A challenge that reopens a dead end or opens a new path has done its job as much as one that confirms a unicorn.</p>
+
+      <h2 style="margin-top:20px">Reading a wave <span class="eyebrow">the method that found the Muse ideas</span></h2>
       <ol>
-        <li>Find a capability tens of millions of people acquired in the last 30 to 60 days. Verify with a number and a date.</li>
-        <li>From Reddit, X, TikTok, press and support forums, list the five things people are visibly doing with it in week three or four. Behaviors, not features.</li>
-        <li>For each behavior, name the adjudication object nobody has made: the per-company scoreboard, the status table, the dated incident log, the buyer's guide, the ritual with a share object. Not the use-case list. Lists fill in days.</li>
-        <li>Count its absence on the obvious channel. Write the query and what came back.</li>
-        <li>Check the rail and the routing. A page a person finds when the robot calls is routed demand. A page nobody searches for is a plaque.</li>
-        <li>Set a ship-or-kill deadline. The window is the gap between the platform's announcement and its own in-app version. Weeks.</li>
-        <li>Re-run the map every two weeks. A live wave produces a new behavior each week, and each one has an unmade object for about a month.</li>
+        <li>Find something tens of millions of people just got, in the last 30 to 60 days. Confirm it with a number and a date.</li>
+        <li>List the five things people are visibly doing with it in week three or four (Reddit, X, TikTok, the press, support forums). What they do, not what it can do.</li>
+        <li>For each behavior, name the thing nobody has made: the "which companies accept it" table, the "what went wrong" log, the "which one should I buy" guide, the one-page explainer for the person on the other end of the call. Not another list of use cases. Lists get made in days.</li>
+        <li>Count that it is missing. Write the search and what came back.</li>
+        <li>Check that people would find it, and that there is a way to get paid.</li>
+        <li>Set the ship-or-drop date. The window is the gap between the launch and the company's own built-in version. Weeks.</li>
+        <li>Do it again every two weeks. A live wave produces a new behavior every week, and each one stays unmade for about a month.</li>
       </ol>
-      <h2 style="margin-top:20px">Kill rules</h2>
+
+      <h2 style="margin-top:20px">When to drop an idea</h2>
       <ul>
-        <li>The moat is a skill, a relationship, or hustle. Kill it. That is an earned advantage, not a windfall.</li>
-        <li>The window cannot be dated to a specific change. Kill it or send it back to lead.</li>
-        <li>You cannot articulate why it is unclaimed. Assume it is claimed.</li>
-        <li>It needs meaningful capital or a licence you cannot get within weeks. Kill it unless the licence itself is the windfall.</li>
-        <li>Three funded competitors or a "best tools for X" listicle exists. The window is closing. Kill it.</li>
-        <li>It is only here because it was the best thing the search found. That is not a reason. Kill it or send it back to lead with a named evidence gap.</li>
-        <li><b>Lane lock.</b> No two consecutive cycles in the same lane. If the last cycle was "AI makes X, list it on Y", the next cycle sends at least three hunters somewhere else entirely. A hunter may return zero candidates. The ledger's most expensive mistake so far was a whole cycle dug in the lane where the last gold rush happened, which is the one place everyone has already looked.</li>
-        <li>The position is a state-listed person and the listing costs under 40 hours and 30 days to get. A cheap, fast credential fills the list in weeks. Record credential cost and latency before scoring moat.</li>
+        <li>You cannot say what changed, and when. Drop it, or send it back to lead.</li>
+        <li>You cannot say why nobody has done it. Assume someone has.</li>
+        <li>You counted and it already exists three or more times, or a "best X for Y" article exists. The door is closing.</li>
+        <li>It needs real money, or a licence or qualification that takes more than a few weeks.</li>
+        <li>It needs you to be good at something, know someone, or hustle. That is a job, not a windfall.</li>
+        <li>It is only here because it was the best thing one search found. That is not a reason.</li>
+        <li><b>Lane lock.</b> No two hunts in a row in the same lane. If the last hunt was "AI makes X, sell it on Y", the next one goes somewhere else entirely. A hunt may come back with nothing. The most expensive mistake so far was a whole hunt spent in the lane where the last gold rush happened, which is the one place everyone has already looked.</li>
+        <li>A cheap, fast credential is not a head start. If anyone can get on the list in under 40 hours and 30 days, the list fills in weeks.</li>
       </ul>
-      <h2 style="margin-top:20px">Lessons the archive has paid for</h2>
+
+      <h2 style="margin-top:20px">Lessons this archive has paid for</h2>
       <ul>
-        <li><b>A thin list is not a thin market.</b> Count students, not instructors. Colorado minted 330 instructors against 502 students in month one. Read the regulator's throughput numbers before believing a roster gap.</li>
-        <li><b>Portability kills geography.</b> If the buyer can use any listed provider in the state, an empty county is a map of low demand, not unclaimed rent.</li>
-        <li><b>Look upstream of the mandate.</b> The scarce thing in the Colorado cluster was not the new course but the old volunteer hunter-ed class it leaned on. New mandates bolted onto under-sized legacy programs create accidental bottlenecks.</li>
-        <li><b>"Newly free" is not "newly possible".</b> Check when the channel FIRST accepted the thing, not when the tool went free. Spotify took AI audiobooks in February 2025; the September 2026 tool only made them cheaper, and the obvious terms were already taken.</li>
-        <li><b>A pool-pay channel without topic search is not a coloring-book channel.</b> Spotify routes author names and charts; Amazon routes nouns. The first entrant only locks in where a keyword rank exists.</li>
-        <li><b>Count the occupants before scoring the engine.</b> Two of four "empty cells" in cycle 2 had 2026 entrants running the exact play. The hunters found the cheap engine and skipped the count.</li>
-        <li><b>An invite gate with thousands inside is not a window.</b> Kindle Translate's beta had "thousands of authors" pushing the button before anyone outside noticed.</li>
-        <li><b>"No official list" is not "no list".</b> A volunteer SEO class now pre-builds pages for events that have not happened. Plug-in solar trackers held pages for states whose bills were stalled; nine domains had California pages within a week of the signature. Count the unofficial lists before scoring an explainer or directory.</li>
-        <li><b>On a platform wave, aggregation closes in days; adjudication stays open for weeks.</b> Ten Muse use-case aggregators appeared within a month. Zero per-company scoreboards, zero incident logs, zero buyer's guides. Plays that need a point of view and a structured crowd are the ones the fast aggregators skip.</li>
-        <li><b>The window on a platform wave is the gap between the platform's announcement and its own in-app version.</b> Meta's chief AI officer was posting the dollars-saved tally within a week. Weeks, not months. Ship in seven days or do not ship.</li>
-        <li><b>A ritual with no search step has no routed demand.</b> Everyone names their Muse, and nobody searches for a name first. Share objects need a public surface (the avatar on a keychain screen) before a page can own them.</li>
-        <li><b>Company-intent and legal signals lead; channel signals only confirm.</b> The Muse retro-test showed the wave was visible three to eight months out on surfaces the detector never watched: a smaller channel's star curve, a model name reused as a brand with a domain handover, a codename leak with an internal-testing end date, earnings-call language, an open-weights release, an official SDK repo eleven days early, a court ruling that moved liability to the user. The channel-native signals (help-page edits, invite labels, store listings) fired one day before launch. Watch GitHub org activity and app-store developer-id lookups mechanically.</li>
-        <li><b>A platform-owner wave legislates in weeks, not months.</b> When the platform routes its own demand (ads, a messaging surface), the closing signature (terms, protocols, trust products) arrived on days 12 to 28. Every object on such a wave needs a deadline inside two weeks of filing.</li>
-        <li><b>The sellable surface is the adjacent layer the platform left non-commercial or unspecified.</b> Gadget tokens cannot be sold, so kits, enclosures, firmware and guides are the surface. The agent has no user agent string, so merchant readiness and the adjudication page are the surface. Skills have no store, so reviewed vertical packs are the surface. Look for the clause that says "no selling" and build next to it.</li>
-        <li><b>Count on the surface where the market's builders publish.</b> Zero scoreboards in fourteen GitHub repos was the whole case for the Trump Accounts tracker. That market lives in newsrooms, think tanks, trade press, 529 sites and SEO affiliates, and ten of them had built it by September. A GitHub count only counts a GitHub market.</li>
-        <li><b>Stigma is a claim to test, not a moat.</b> The hiding reason "nobody will put that name on a domain" was false on day one: a think tank built the tracker in January. Before scoring obscurity on stigma, search the people who do not share the stigma.</li>
-        <li><b>Tech shutdowns are watched.</b> Every SaaS death with scale had three funded "migrate from X" pages within a week. Orphans worth having are physical, low status, and below the incumbents' minimums.</li>
+        <li><b>A short list of providers is not a small market.</b> Count the customers, not the providers. Colorado minted 330 instructors for 502 students in month one.</li>
+        <li><b>If the buyer can use anyone in the state, an empty county is low demand</b>, not free money.</li>
+        <li><b>Look one step before the new rule.</b> The scarce thing in Colorado was not the new course but the old volunteer class it leaned on.</li>
+        <li><b>"Newly cheap" is not "newly possible".</b> Check when the store FIRST accepted the thing, not when the tool got cheap. Spotify took AI audiobooks in February 2025; the September 2026 tool only made them cheaper, and the obvious titles were already taken.</li>
+        <li><b>A store that pays from a shared pool and has no topic search is not Etsy.</b> Being first only locks in where a search ranking exists.</li>
+        <li><b>Count the people already there before you fall for the tool.</b> Two of four "empty" spots in hunt 2 had 2026 entrants running the exact play.</li>
+        <li><b>An invite-only beta with thousands inside is not a head start.</b> Kindle Translate had thousands of authors pressing the button before anyone outside noticed.</li>
+        <li><b>"No official list" is not "no list".</b> Volunteer SEO sites pre-build pages for events that have not happened yet. Count the unofficial lists before scoring a guide or directory.</li>
+        <li><b>After a big launch, lists get made in days; judgement calls stay unmade for weeks.</b> Ten Muse use-case lists appeared within a month. Zero per-company scoreboards, zero incident logs, zero buyer's guides.</li>
+        <li><b>The window after a big-company launch is the gap until its own built-in version.</b> Meta's chief AI officer was posting the dollars-saved tally within a week. Ship in seven days or do not ship.</li>
+        <li><b>A ritual nobody searches for has no customers.</b> Everyone names their Muse; nobody searches for a name first.</li>
+        <li><b>Tech shutdowns are watched.</b> Every software death with scale had three funded "migrate from X" pages within a week. The orphans worth having are physical, unglamorous, and too small for the big players.</li>
+        <li><b>What a company intends shows up months early; the store itself shows up a day early.</b> Muse was visible three to eight months out: a hit open-source project it copied, its model name reused as a brand with a domain handover, a code name leaking with a test end-date, the CEO's earnings-call language, an open-weights model, an official developer kit posted eleven days early, a court ruling that shifted liability to the user. The app-store signs fired one day before launch. Watch the company's GitHub and the app store's developer id mechanically.</li>
+        <li><b>A big-company wave makes rules within weeks, not months.</b> When the company routes its own demand (ads, a messaging app), the "no more" moment (terms, protocols, trust products) came on days 12 to 28. Every idea on such a wave needs a date inside two weeks.</li>
+        <li><b>Build next to the "no selling" clause.</b> Gadget tokens cannot be sold, so kits, cases, firmware and guides are the sellable layer. The agent has no identifying signature, so "does it work here" pages and merchant readiness are the layer. Skills have no store, so reviewed vertical packs are the layer. Find the clause that says "not for sale" and build beside it.</li>
+        <li><b>Count where that market's builders actually publish.</b> Zero scoreboards in fourteen GitHub repos was the whole case for the Trump Accounts tracker. That market lives in newsrooms, think tanks, trade press, 529 sites and SEO affiliates, and ten of them had built it by September. A GitHub count only counts a GitHub market.</li>
+        <li><b>"Nobody would put their name on that" is a claim to test, not a reason.</b> A think tank built the Trump Accounts tracker in January. Before scoring on stigma, search the people who do not share it.</li>
       </ul>
-      <h2 style="margin-top:20px">Decision record</h2>
-      <p>Decisions go in the journal as entries of kind "decision" with the options considered and the reason. Pivots in search direction go in as "pivot". The journal is the memory of the hunt across sessions.</p>
+
+      <h2 style="margin-top:20px">Decisions</h2>
+      <p>Decisions go in the journal as entries of kind "decision", with the options considered and the reason. Changes of direction go in as "pivot". The journal is the memory of the hunt across sessions.</p>
     </div>
   </section>
 </div>
@@ -335,15 +360,19 @@ const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const today=()=>new Date().toISOString().slice(0,10);
 const SCORE_DIMS=[
- ['moat','Position moat','Law, contract, physics, geography, history, or being first in a channel whose ranking makes the first the default. 0 = pure skill.'],
- ['mandatory','Routed demand','Buyers are routed to you by statute or by a channel\'s search and ranking. 0 = you must go find them.'],
- ['capital','Capital lightness','5 = near zero capital. 0 = needs serious money.'],
- ['monetize','Monetization ease','5 = obvious price, pays upfront. 0 = unclear business model.'],
- ['pull','Inbound pull','5 = people already asking to pay. 0 = must be sold cold.'],
- ['window','Window freshness','5 = shift dated within months, unexploited. 0 = crowded or stale.'],
- ['obscurity','Hiding strength','5 = strong, durable reason nobody has seen it. 0 = obvious to all.'],
- ['durability','Durability','5 = holds for years once taken. 0 = evaporates fast.'],
+ ['first','Are you first?','5 = you counted, and nobody has made this. 3 = one or two half-versions exist. 0 = it is everywhere. This is the gate.'],
+ ['mandatory','Will people come looking?','5 = people already search or ask for exactly this, and the place they look would show them yours. 0 = you would have to go find them.'],
+ ['capital','Costs nothing to start?','5 = free or close to it. 0 = needs real money.'],
+ ['monetize','Easy to get paid?','5 = an obvious price and people pay up front. 0 = no clear way to charge.'],
+ ['pull','Do they come to you?','5 = people are already asking to buy. 0 = you would have to sell it cold.'],
+ ['window','Did the door just open?','5 = the change that made this possible happened in the last few months and nobody has used it. 0 = old news or crowded.'],
+ ['obscurity','Is there a reason nobody has done it?','5 = a clear, specific reason that still holds. 0 = no reason, it is just sitting there.'],
+ ['durability','Does being first keep paying?','5 = the first one in becomes the name of the category for years. 0 = it fades in weeks. A bonus, not a requirement.'],
 ];
+const BAR={first:4,window:3,total:30};
+const LABELS={unicorn:'Unicorn',vetting:'Being checked',lead:'Lead',killed:'Dropped',open:'Open',digging:'Being dug',fertile:'Promising',exhausted:'Fully searched',holds:'Holds up',weakened:'Weakened',fails:'Falls apart',stands:'Stands',reopen:'Reopen it'};
+function lab(s){return LABELS[s]||s||''}
+function barFail(c){const sc=k=>Number(c.scores&&c.scores[k])||0;if(sc('first')<BAR.first)return 'not clearly first yet (needs 4 or 5, counted)';if(sc('window')<BAR.window)return 'the door did not just open (needs 3 or more)';if(total(c)<BAR.total)return 'total '+total(c)+'/40, needs '+BAR.total;if(!(c.recipes||[]).length)return 'no reason named for why nobody has done it';return ''}
 const MOAT_TYPES=['Flagship by default','Scarce asset','Grandfathered entry','Mandatory stop','Exclusive','Default slot','Orphaned customers','Giant needs you','Locked-in customers','Caught the wave','Handed for free','Irreplaceable data','Only road','Legal for you only'];
 const STATE={cands:[],terrs:[],vectors:[],recipes:[],moats:[],journal:[],signals:[],cases:[],waves:[],canWrite:false,db:null,uid:null};
 let db=null,sampleFn=null;
@@ -357,7 +386,7 @@ try{ const t=localStorage.getItem('wh-tab')||(location.hash||'').slice(1); const
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2200)}
 function total(c){return SCORE_DIMS.reduce((a,[k])=>a+(Number(c.scores&&c.scores[k])||0),0)}
 function minDim(c){return Math.min(...SCORE_DIMS.map(([k])=>Number(c.scores&&c.scores[k])||0))}
-function meetsBar(c){return total(c)>=32&&minDim(c)>=3&&(c.recipes||[]).length>0&&!!c.moat}
+function meetsBar(c){return !barFail(c)}
 function tokens(s){return String(s||'').toLowerCase().split(/[^a-z0-9]+/).filter(w=>w.length>2&&!STOP.has(w))}
 const STOP=new Set(['the','and','for','with','that','this','from','are','was','into','has','have','not','but','you','all','any','can','its','who','what','when','where','how','why']);
 function overlap(q,t){const a=new Set(tokens(q));if(!a.size)return 0;const b=new Set(tokens([t.name,t.keywords,t.notes,t.verdict].join(' ')));let n=0;a.forEach(w=>{if(b.has(w))n++});return n/a.size}
@@ -367,13 +396,13 @@ function renderAll(){renderBoard();renderCands();renderTerrs();renderPlaybook();
 function renderBoard(){
   const u=STATE.cands.filter(c=>c.status==='unicorn').length,v=STATE.cands.filter(c=>c.status==='vetting').length,l=STATE.cands.filter(c=>c.status==='lead').length,k=STATE.cands.filter(c=>c.status==='killed').length;
   const ex=STATE.terrs.filter(t=>t.status==='exhausted').length,fe=STATE.terrs.filter(t=>t.status==='fertile').length,dg=STATE.terrs.filter(t=>t.status==='digging'||t.status==='open').length;
-  $('#tiles').innerHTML=[['gold',u,'Unicorns'],['blue',v,'Vetting'],['accent',l,'Leads'],['red',k,'Killed'],['green',fe,'Fertile territories'],['',ex,'Exhausted territories'],['',dg,'Open / digging']].map(([c,n,l])=>`<div class="tile ${c}"><div class="l">${l}</div><div class="v num">${n}</div></div>`).join('');
+  $('#tiles').innerHTML=[['gold',u,'Unicorns'],['blue',v,'Being checked'],['accent',l,'Leads'],['red',k,'Dropped'],['green',fe,'Ground with promise'],['',ex,'Ground fully searched'],['',dg,'Being dug now']].map(([c,n,l])=>`<div class="tile ${c}"><div class="l">${l}</div><div class="v num">${n}</div></div>`).join('');
   const top=STATE.cands.filter(c=>c.status==='unicorn'||c.status==='vetting').sort((a,b)=>total(b)-total(a)).slice(0,8);
-  $('#board-cands').innerHTML=top.length?top.map(c=>`<div class="item ${c.status==='unicorn'?'gold':'accent'} row" data-cand="${esc(c.id)}" style="cursor:pointer"><div class="t">${esc(c.name)} <span class="pill ${esc(c.status)}">${esc(c.status)}</span> <span class="score num">${total(c)}/40</span></div><div class="m">${esc(c.oneline)}</div></div>`).join(''):`<div class="empty">No unicorns yet. The archive fills first, the unicorns come after.</div>`;
+  $('#board-cands').innerHTML=top.length?top.map(c=>`<div class="item ${c.status==='unicorn'?'gold':'accent'} row" data-cand="${esc(c.id)}" style="cursor:pointer"><div class="t">${esc(c.name)} <span class="pill ${esc(c.status)}">${lab(c.status)}</span> <span class="score num">${total(c)}/40</span></div><div class="m">${esc(c.oneline)}</div></div>`).join(''):`<div class="empty">No unicorns yet. The archive fills up first; the unicorns come after.</div>`;
   const live=STATE.cands.filter(c=>c.deadline&&c.status!=='killed').map(c=>({c,days:Math.ceil((new Date(c.deadline+'T00:00:00')-new Date(today()+'T00:00:00'))/86400000)})).sort((a,b)=>a.days-b.days);
-  $('#board-clock').innerHTML=live.length?live.map(({c,days})=>`<div class="item ${days<0?'':days<=3?'accent':'green'} row" data-cand="${esc(c.id)}" style="cursor:pointer;${days<0?'border-left-color:var(--red)':''}"><div class="t">${esc(c.name.slice(0,90))}${c.name.length>90?'…':''} <span class="pill ${days<0?'killed':days<=3?'open':'fertile'}">${days<0?'overdue '+(-days)+'d':days===0?'today':days+'d left'}</span></div><div class="m">${esc((c.next||'').slice(0,160))}</div></div>`).join(''):`<div class="empty">No candidate has a deadline. Windows on platform waves are weeks; set one.</div>`;
+  $('#board-clock').innerHTML=live.length?live.map(({c,days})=>`<div class="item ${days<0?'':days<=3?'accent':'green'} row" data-cand="${esc(c.id)}" style="cursor:pointer;${days<0?'border-left-color:var(--red)':''}"><div class="t">${esc(c.name.slice(0,90))}${c.name.length>90?'…':''} <span class="pill ${days<0?'killed':days<=3?'open':'fertile'}">${days<0?'overdue '+(-days)+'d':days===0?'today':days+'d left'}</span></div><div class="m">${esc((c.next||'').slice(0,160))}</div></div>`).join(''):`<div class="empty">No idea has a date yet. On a big launch the window is weeks, so set one.</div>`;
   const th=STATE.terrs.filter(t=>t.thread&&t.thread.trim()&&t.thread.trim().toLowerCase()!=='none'&&t.status!=='exhausted').slice(0,8);
-  $('#board-threads').innerHTML=th.length?th.map(t=>`<div class="item green row" data-terr="${esc(t.id)}" style="cursor:pointer"><div class="t">${esc(t.name)}</div><div class="m">${esc(t.thread)}</div></div>`).join(''):`<div class="empty">No hanging threads. Claim a territory from the playbook.</div>`;
+  $('#board-threads').innerHTML=th.length?th.map(t=>`<div class="item green row" data-terr="${esc(t.id)}" style="cursor:pointer"><div class="t">${esc(t.name)}</div><div class="m">${esc(t.thread)}</div></div>`).join(''):`<div class="empty">No loose threads. Pick a way in from "Where to look" and log new ground.</div>`;
   const j=STATE.journal.slice(0,4);
   $('#board-journal').innerHTML=j.length?j.map(e=>`<div class="item"><div class="t">${esc(e.title)} <span class="pill tag">${esc(e.kind)}</span> <span class="mono muted">${esc(e.date)}</span></div><div class="m">${esc((e.body||'').slice(0,220))}${(e.body||'').length>220?'…':''}</div></div>`).join(''):`<div class="empty">Nothing logged yet.</div>`;
 }
@@ -381,27 +410,27 @@ function renderCands(){
   const q=$('#cand-q').value.toLowerCase(),st=$('#cand-status').value,mo=$('#cand-moat').value;
   const sel=$('#cand-moat');if(sel.options.length<2){MOAT_TYPES.forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;sel.appendChild(o)})}
   const rows=STATE.cands.filter(c=>(!st||c.status===st)&&(!mo||c.moat===mo)&&(!q||[c.name,c.oneline,c.evidence,c.window].join(' ').toLowerCase().includes(q))).sort((a,b)=>({unicorn:0,vetting:1,lead:2,killed:3}[a.status]-{unicorn:0,vetting:1,lead:2,killed:3}[b.status])||total(b)-total(a));
-  $('#cand-tbl tbody').innerHTML=rows.length?rows.map(c=>`<tr class="row" data-cand="${esc(c.id)}"><td><div class="name">${esc(c.name)}</div><div class="sub">${esc(c.oneline)}</div></td><td class="mono">${esc(c.moat||'—')}</td><td class="sub">${esc((c.window||'').slice(0,90))}</td><td><div class="score num">${total(c)}<span class="muted">/40</span></div><div class="bar ${meetsBar(c)?'gold':''}"><i style="width:${total(c)/40*100}%"></i></div></td><td><span class="pill ${esc(c.status)}">${esc(c.status)}</span>${meetsBar(c)&&c.status!=='unicorn'?'<div class="mono muted" style="margin-top:4px">meets bar</div>':''}${lastChal(c)?`<div style="margin-top:4px"><span class="pill ${esc(lastChal(c).verdict)}">challenged: ${esc(lastChal(c).verdict)}</span></div>`:''}</td></tr>`).join(''):`<tr><td colspan="5"><div class="empty">No candidates match.</div></td></tr>`;
+  $('#cand-tbl tbody').innerHTML=rows.length?rows.map(c=>`<tr class="row" data-cand="${esc(c.id)}"><td><div class="name">${esc(c.name)}</div><div class="sub">${esc(c.oneline)}</div></td><td class="mono">${esc(c.moat||'—')}</td><td class="sub">${esc((c.window||'').slice(0,90))}</td><td><div class="score num">${total(c)}<span class="muted">/40</span></div><div class="bar ${meetsBar(c)?'gold':''}"><i style="width:${total(c)/40*100}%"></i></div></td><td><span class="pill ${esc(c.status)}">${lab(c.status)}</span>${meetsBar(c)&&c.status!=='unicorn'?'<div class="mono muted" style="margin-top:4px">clears the bar</div>':''}${lastChal(c)?`<div style="margin-top:4px"><span class="pill ${esc(lastChal(c).verdict)}">challenged: ${esc(lastChal(c).verdict)}</span></div>`:''}</td></tr>`).join(''):`<tr><td colspan="5"><div class="empty">No candidates match.</div></td></tr>`;
 }
 function renderTerrs(){
   const q=$('#terr-q').value.toLowerCase(),st=$('#terr-status').value,vc=$('#terr-vector').value;
   const sel=$('#terr-vector');const have=new Set(Array.from(sel.options).map(o=>o.value));STATE.vectors.forEach(v=>{if(!have.has(v.id)){const o=document.createElement('option');o.value=v.id;o.textContent=v.name;sel.appendChild(o)}});
   const rows=STATE.terrs.filter(t=>(!st||t.status===st)&&(!vc||t.vector===vc)&&(!q||[t.name,t.keywords,t.notes,t.verdict,t.deadend].join(' ').toLowerCase().includes(q)));
-  $('#terr-tbl tbody').innerHTML=rows.length?rows.map(t=>`<tr class="row" data-terr="${esc(t.id)}"><td><div class="name">${esc(t.name)}</div><div class="sub">${esc((t.keywords||'').slice(0,80))}</div></td><td class="mono">${esc(vecName(t.vector))}</td><td class="sub">${esc((t.verdict||t.deadend||'').slice(0,120))}</td><td><span class="pill ${esc(t.status)}">${esc(t.status)}</span></td><td class="mono num">${esc(t.date||'')}</td></tr>`).join(''):`<tr><td colspan="5"><div class="empty">Archive is empty here.</div></td></tr>`;
+  $('#terr-tbl tbody').innerHTML=rows.length?rows.map(t=>`<tr class="row" data-terr="${esc(t.id)}"><td><div class="name">${esc(t.name)}</div><div class="sub">${esc((t.keywords||'').slice(0,80))}</div></td><td class="mono">${esc(vecName(t.vector))}</td><td class="sub">${esc((t.verdict||t.deadend||'').slice(0,120))}</td><td><span class="pill ${esc(t.status)}">${lab(t.status)}</span></td><td class="mono num">${esc(t.date||'')}</td></tr>`).join(''):`<tr><td colspan="5"><div class="empty">Nothing in the archive matches.</div></td></tr>`;
 }
 function vecName(id){const v=STATE.vectors.find(v=>v.id===id);return v?v.name:(id||'—')}
 function renderPlaybook(){
   const hits=id=>STATE.terrs.filter(t=>t.vector===id),fert=id=>hits(id).filter(t=>t.status==='fertile').length;
-  $('#vectors').innerHTML=STATE.vectors.length?STATE.vectors.map(v=>`<div class="pb"><h4>${esc(v.name)}</h4><div class="m">${esc(v.how)}</div><div class="hits">${hits(v.id).length} dug · ${fert(v.id)} fertile · ${hits(v.id).filter(t=>t.status==='exhausted').length} exhausted</div></div>`).join(''):'<div class="empty">No vectors seeded.</div>';
-  $('#recipes').innerHTML=STATE.recipes.length?STATE.recipes.map(r=>`<div class="pb"><h4>${esc(r.name)}</h4><div class="m">${esc(r.why)}</div><div class="hits">${STATE.cands.filter(c=>(c.recipes||[]).includes(r.id)).length} candidates carry this</div></div>`).join(''):'<div class="empty">No recipes seeded.</div>';
-  $('#moats').innerHTML=STATE.moats.length?STATE.moats.map(m=>`<div class="pb"><h4>${esc(m.name)}</h4><div class="m">${esc(m.what)}</div><div class="hits">${STATE.cands.filter(c=>c.moat===m.name).length} candidates</div></div>`).join(''):'<div class="empty">No moat types seeded.</div>';
+  $('#vectors').innerHTML=STATE.vectors.length?STATE.vectors.map(v=>`<div class="pb"><h4>${esc(v.name)}</h4><div class="m">${esc(v.how)}</div><div class="hits">${hits(v.id).length} searched · ${fert(v.id)} promising · ${hits(v.id).filter(t=>t.status==='exhausted').length} fully searched</div></div>`).join(''):'<div class="empty">No ways in yet.</div>';
+  $('#recipes').innerHTML=STATE.recipes.length?STATE.recipes.map(r=>`<div class="pb"><h4>${esc(r.name)}</h4><div class="m">${esc(r.why)}</div><div class="hits">${STATE.cands.filter(c=>(c.recipes||[]).includes(r.id)).length} ideas have this</div></div>`).join(''):'<div class="empty">No reasons yet.</div>';
+  $('#moats').innerHTML=STATE.moats.length?STATE.moats.map(m=>`<div class="pb"><h4>${esc(m.name)}</h4><div class="m">${esc(m.what)}</div><div class="hits">${STATE.cands.filter(c=>c.moat===m.name).length} ideas</div></div>`).join(''):'<div class="empty">None yet.</div>';
   $('#rubric').innerHTML=SCORE_DIMS.map(([k,n,d])=>`<div class="rub"><b>${esc(n)}</b>${esc(d)}<span class="mono muted">${k}</span></div>`).join('');
 }
 function renderDetector(){
   const w={high:'green',medium:'gold',low:'grey'};
-  $('#signals').innerHTML=STATE.signals.length?STATE.signals.map(g=>`<div class="pb"><h4>${esc(g.signal)} <span class="pill ${g.weight==='high'?'fertile':g.weight==='medium'?'unicorn':'exhausted'}">${esc(g.weight)}</span></h4><div class="m">${esc(g.how)}</div><div class="hits">lead time: ${esc(g.lead)}</div>${g.retro?`<div class="muted" style="margin-top:4px"><b>Retro (Muse, Sep 2026):</b> ${esc(g.retro.fired||'')}${g.retro.when?` · ${esc(g.retro.when)}`:''}${g.retro.evidence?`<br>${esc(g.retro.evidence)}`:''}</div>`:''}</div>`).join(''):'<div class="empty">No signals yet.</div>';
-  $('#waves').innerHTML=STATE.waves.length?STATE.waves.map(w=>`<details class="item accent" ${w.live?'open':''}><summary style="cursor:pointer"><span class="t">${esc(w.name)}</span> <span class="mono muted">${esc(w.date||'')}</span> <span class="pill tag">${esc(w.scale||'')}</span></summary><div class="m" style="margin-top:8px">${(w.behaviors||[]).map(b=>`<div style="margin-bottom:8px"><b>${esc(b.behavior)}</b><br><span class="muted">Unmade:</span> ${esc(b.missing)}<br><span class="muted">Count:</span> ${esc(b.count||'')}${b.rail?`<br><span class="muted">Rail:</span> ${esc(b.rail)}`:''}</div>`).join('')}${w.notes?`<div class="muted" style="margin-top:6px">${esc(w.notes)}</div>`:''}</div></details>`).join(''):'<div class="empty">No wave mapped yet.</div>';
-  $('#cases').innerHTML=STATE.cases.length?STATE.cases.map(c=>`<details class="item"><summary style="cursor:pointer"><span class="t">${esc(c.name)}</span></summary><div class="m" style="margin-top:6px"><b>Capability:</b> ${esc(c.capability)}<br><b>Channel:</b> ${esc(c.channel)}<br><b>What the ranking rewarded:</b> ${esc(c.ranking)}<br><b>Timeline:</b> ${esc(c.timeline)}<br><b>Early earnings:</b> ${esc(c.earnings)}<br><b>Visible before it opened:</b><ul style="margin:4px 0 0;padding-left:18px">${(c.lead_indicators||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${(c.lag_table||[]).length?`<div style="margin-top:8px"><b>Day-by-day lag table:</b><table style="width:100%;border-collapse:collapse;margin-top:4px;font-size:12px">${c.lag_table.map(r=>`<tr><td class="mono" style="padding:2px 6px 2px 0;vertical-align:top;white-space:nowrap">day ${esc(String(r.day))}</td><td style="padding:2px 6px 2px 0;vertical-align:top">${esc(r.milestone)}</td><td class="muted" style="padding:2px 0;vertical-align:top">${esc(r.evidence||'')}</td></tr>`).join('')}</table></div>`:''}${c.lesson?`<div style="margin-top:8px"><b>Lesson:</b> ${esc(c.lesson)}</div>`:''}${(c.sources||[]).length?`<div class="mono" style="margin-top:6px">${c.sources.map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\//,'').slice(0,60))}</a>`).join(' · ')}</div>`:''}</div></details>`).join(''):'<div class="empty">No cases yet.</div>';
+  $('#signals').innerHTML=STATE.signals.length?STATE.signals.map(g=>`<div class="pb"><h4>${esc(g.signal)} <span class="pill ${g.weight==='high'?'fertile':g.weight==='medium'?'unicorn':'exhausted'}">${esc(g.weight)}</span></h4><div class="m">${esc(g.how)}</div><div class="hits">how far ahead it shows up: ${esc(g.lead)}</div>${g.retro?`<div class="muted" style="margin-top:4px"><b>Did it fire before Muse (Sep 2026)?</b> ${esc(g.retro.fired||'')}${g.retro.when?` · ${esc(g.retro.when)}`:''}${g.retro.evidence?`<br>${esc(g.retro.evidence)}`:''}</div>`:''}</div>`).join(''):'<div class="empty">No early warnings yet.</div>';
+  $('#waves').innerHTML=STATE.waves.length?STATE.waves.map(w=>`<details class="item accent" ${w.live?'open':''}><summary style="cursor:pointer"><span class="t">${esc(w.name)}</span> <span class="mono muted">${esc(w.date||'')}</span> <span class="pill tag">${esc(w.scale||'')}</span></summary><div class="m" style="margin-top:8px">${(w.behaviors||[]).map(b=>`<div style="margin-bottom:8px"><b>${esc(b.behavior)}</b><br><span class="muted">Nobody has made:</span> ${esc(b.missing)}<br><span class="muted">What we counted:</span> ${esc(b.count||'')}${b.rail?`<br><span class="muted">How it pays:</span> ${esc(b.rail)}`:''}</div>`).join('')}${w.notes?`<div class="muted" style="margin-top:6px">${esc(w.notes)}</div>`:''}</div></details>`).join(''):'<div class="empty">No wave mapped yet.</div>';
+  $('#cases').innerHTML=STATE.cases.length?STATE.cases.map(c=>`<details class="item"><summary style="cursor:pointer"><span class="t">${esc(c.name)}</span></summary><div class="m" style="margin-top:6px"><b>The new thing:</b> ${esc(c.capability)}<br><b>Where the buyers were:</b> ${esc(c.channel)}<br><b>What being first got you:</b> ${esc(c.ranking)}<br><b>Timeline:</b> ${esc(c.timeline)}<br><b>Early money:</b> ${esc(c.earnings)}<br><b>What you could have seen coming:</b><ul style="margin:4px 0 0;padding-left:18px">${(c.lead_indicators||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${(c.lag_table||[]).length?`<div style="margin-top:8px"><b>Day by day, what happened after launch:</b><table style="width:100%;border-collapse:collapse;margin-top:4px;font-size:12px">${c.lag_table.map(r=>`<tr><td class="mono" style="padding:2px 6px 2px 0;vertical-align:top;white-space:nowrap">day ${esc(String(r.day))}</td><td style="padding:2px 6px 2px 0;vertical-align:top">${esc(r.milestone)}</td><td class="muted" style="padding:2px 0;vertical-align:top">${esc(r.evidence||'')}</td></tr>`).join('')}</table></div>`:''}${c.lesson?`<div style="margin-top:8px"><b>Lesson:</b> ${esc(c.lesson)}</div>`:''}${(c.sources||[]).length?`<div class="mono" style="margin-top:6px">${c.sources.map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\//,'').slice(0,60))}</a>`).join(' · ')}</div>`:''}</div></details>`).join(''):'<div class="empty">No cases yet.</div>';
 }
 function renderJournal(){
   const k=$('#jour-kind').value;const rows=STATE.journal.filter(e=>!k||e.kind===k);
@@ -414,7 +443,7 @@ $('#terr-check').addEventListener('input',()=>{
   const q=$('#terr-check').value;const out=$('#terr-check-out');if(!q.trim()){out.innerHTML='';return}
   const m=STATE.terrs.map(t=>[overlap(q,t),t]).filter(x=>x[0]>0).sort((a,b)=>b[0]-a[0]).slice(0,6);
   const c=STATE.cands.map(t=>[overlap(q,{name:t.name,keywords:t.oneline,notes:t.evidence,verdict:t.window}),t]).filter(x=>x[0]>0).sort((a,b)=>b[0]-a[0]).slice(0,4);
-  out.innerHTML=(m.length||c.length)?m.map(([s,t])=>`<div class="item ${t.status==='exhausted'?'':'green'} row" data-terr="${esc(t.id)}" style="cursor:pointer"><div class="t">${esc(t.name)} <span class="pill ${esc(t.status)}">${esc(t.status)}</span> <span class="mono muted">${Math.round(s*100)}% match</span></div><div class="m">${esc(t.deadend||t.verdict||t.notes||'')}</div></div>`).join('')+c.map(([s,t])=>`<div class="item accent row" data-cand="${esc(t.id)}" style="cursor:pointer"><div class="t">${esc(t.name)} <span class="pill ${esc(t.status)}">${esc(t.status)}</span> <span class="mono muted">candidate · ${Math.round(s*100)}% match</span></div><div class="m">${esc(t.oneline)}</div></div>`).join(''):`<div class="item green"><div class="t">Clear ground.</div><div class="m">Nothing in the archive matches. Claim it as a territory before digging.</div></div>`;
+  out.innerHTML=(m.length||c.length)?m.map(([s,t])=>`<div class="item ${t.status==='exhausted'?'':'green'} row" data-terr="${esc(t.id)}" style="cursor:pointer"><div class="t">${esc(t.name)} <span class="pill ${esc(t.status)}">${lab(t.status)}</span> <span class="mono muted">${Math.round(s*100)}% match</span></div><div class="m">${esc(t.deadend||t.verdict||t.notes||'')}</div></div>`).join('')+c.map(([s,t])=>`<div class="item accent row" data-cand="${esc(t.id)}" style="cursor:pointer"><div class="t">${esc(t.name)} <span class="pill ${esc(t.status)}">${lab(t.status)}</span> <span class="mono muted">candidate · ${Math.round(s*100)}% match</span></div><div class="m">${esc(t.oneline)}</div></div>`).join(''):`<div class="item green"><div class="t">Clear ground.</div><div class="m">Nothing in the archive matches. Log it as new ground before you start digging.</div></div>`;
 });
 document.addEventListener('click',e=>{const r=e.target.closest('[data-cand],[data-terr],[data-jour]');if(!r)return;if(r.dataset.cand)openCand(r.dataset.cand);else if(r.dataset.terr)openTerr(r.dataset.terr);else if(r.dataset.jour)openJour(r.dataset.jour)});
 
@@ -432,26 +461,26 @@ function openCand(id){
   const c=id?STATE.cands.find(x=>x.id===id):{id:null,name:'',oneline:'',moat:'',window:'',shift:'',evidence:'',recipes:[],scores:{},status:'lead',kill:'',next:'',territory:'',date:today()};
   if(!c)return;drawer.classList.add('open');
   const bar=meetsBar(c);
-  panel.innerHTML=`<div class="head"><div><div class="eyebrow">Candidate dossier</div><h2>${esc(c.name||'New candidate')}</h2></div><button class="btn ghost sm" id="dr-close">Close</button></div>
+  panel.innerHTML=`<div class="head"><div><div class="eyebrow">Idea file</div><h2>${esc(c.name||'New idea')}</h2></div><button class="btn ghost sm" id="dr-close">Close</button></div>
   ${roNote()}
-  <div class="verdict ${bar?'yes':'no'}" id="dr-verdict">${bar?'Meets the unicorn bar':'Below the bar: '+(total(c)<32?'total '+total(c)+'/40':minDim(c)<3?'a dimension under 3':!(c.recipes||[]).length?'no hiding reason named':'no moat type')}</div>
+  <div class="verdict ${bar?'yes':'no'}" id="dr-verdict">${bar?'Clears the bar. First, fresh, and nobody has done it.':'Below the bar: '+barFail(c)}</div>
   ${fld('c-name','Name',c.name)}
-  ${fld('c-oneline','One line',c.oneline)}
-  <div class="f2">${self('c-moat','Moat type',c.moat,[['','—'],...MOAT_TYPES.map(m=>[m,m])])}${self('c-status','Status',c.status,[['lead','Lead'],['vetting','Vetting'],['unicorn','Unicorn'],['killed','Killed']])}</div>
-  ${fld('c-shift','The dated shift that opened the window',c.shift,'textarea','placeholder="Name the law, exit, price drop, deadline. Date it."')}
-  ${fld('c-window','Window evidence and how long it stays open',c.window,'textarea')}
-  <div class="f"><label>Why nobody has found it</label><div class="chips" id="c-recipes">${STATE.recipes.map(r=>`<button type="button" class="chip" data-r="${esc(r.id)}" aria-pressed="${(c.recipes||[]).includes(r.id)}">${esc(r.name)}</button>`).join('')}</div></div>
-  <div class="f"><label>Scores</label><div class="scores">${SCORE_DIMS.map(([k,n,d])=>`<div class="sc"><div class="lbl"><span>${esc(n)}</span><small>${esc(d.split('.')[0])}</small></div><input type="range" min="0" max="5" step="1" id="s-${k}" value="${Number(c.scores&&c.scores[k])||0}"><span class="score num" id="sv-${k}">${Number(c.scores&&c.scores[k])||0}</span></div>`).join('')}</div><div class="mono" style="margin-top:6px">total <b id="s-total">${total(c)}</b>/40</div></div>
-  ${fld('c-evidence','Evidence, sources, rabbit-hole notes',c.evidence,'textarea','style="min-height:120px"')}
-  ${fld('c-territory','Territory it came from',c.territory)}
-  ${fld('c-kill','Kill reason (if killed)',c.kill)}
-  <div class="f2">${fld('c-next','Next action',c.next)}${fld('c-deadline','Ship-or-kill deadline (YYYY-MM-DD)',c.deadline||'','input','placeholder="leave blank if no window"')}</div>
-  ${Array.isArray(c.seed)&&c.seed.length?`<details class="chal"><summary style="cursor:pointer;font-weight:600">Seed data (${c.seed.length} rows) · ready to ship</summary><div class="scroll" style="margin-top:8px"><table class="tbl" style="font-size:12.5px"><thead><tr>${Object.keys(c.seed[0]).map(k=>`<th>${esc(k)}</th>`).join('')}</tr></thead><tbody>${c.seed.map(r=>`<tr>${Object.keys(c.seed[0]).map(k=>`<td>${/^https?:\/\//.test(String(r[k]||''))?`<a href="${esc(r[k])}" target="_blank" rel="noopener">link</a>`:esc(r[k])}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`:''}
+  ${fld('c-oneline','The idea in one sentence',c.oneline)}
+  <div class="f2">${self('c-moat','Kind of head start (optional)',c.moat,[['','—'],...MOAT_TYPES.map(m=>[m,m])])}${self('c-status','Status',c.status,[['lead','Lead (worth a look)'],['vetting','Being checked'],['unicorn','Unicorn (clears the bar, challenged)'],['killed','Dropped']])}</div>
+  ${fld('c-shift','What changed, and when (the thing that opened the door)',c.shift,'textarea','placeholder="The new tool, store, rule or launch. Put a date on it."')}
+  ${fld('c-window','How long the door stays open, and how you know',c.window,'textarea')}
+  <div class="f"><label>Why nobody has done it yet (pick all that apply)</label><div class="chips" id="c-recipes">${STATE.recipes.map(r=>`<button type="button" class="chip" data-r="${esc(r.id)}" aria-pressed="${(c.recipes||[]).includes(r.id)}">${esc(r.name)}</button>`).join('')}</div></div>
+  <div class="f"><label>Score it (0 to 5 each)</label><div class="scores">${SCORE_DIMS.map(([k,n,d])=>`<div class="sc"><div class="lbl"><span>${esc(n)}</span><small>${esc(d.split('.')[0])}</small></div><input type="range" min="0" max="5" step="1" id="s-${k}" value="${Number(c.scores&&c.scores[k])||0}"><span class="score num" id="sv-${k}">${Number(c.scores&&c.scores[k])||0}</span></div>`).join('')}</div><div class="mono" style="margin-top:6px">total <b id="s-total">${total(c)}</b>/40</div></div>
+  ${fld('c-evidence','Evidence, links, and what we counted',c.evidence,'textarea','style="min-height:120px"')}
+  ${fld('c-territory','Ground it came from',c.territory)}
+  ${fld('c-kill','Why it was dropped (if dropped)',c.kill)}
+  <div class="f2">${fld('c-next','Next step',c.next)}${fld('c-deadline','Ship it or drop it by (YYYY-MM-DD)',c.deadline||'','input','placeholder="leave blank if there is no clock"')}</div>
+  ${Array.isArray(c.seed)&&c.seed.length?`<details class="chal"><summary style="cursor:pointer;font-weight:600">Starter data (${c.seed.length} rows), ready to publish</summary><div class="scroll" style="margin-top:8px"><table class="tbl" style="font-size:12.5px"><thead><tr>${Object.keys(c.seed[0]).map(k=>`<th>${esc(k)}</th>`).join('')}</tr></thead><tbody>${c.seed.map(r=>`<tr>${Object.keys(c.seed[0]).map(k=>`<td>${/^https?:\/\//.test(String(r[k]||''))?`<a href="${esc(r[k])}" target="_blank" rel="noopener">link</a>`:esc(r[k])}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`:''}
   ${c.id?challengeBox(c,'cand'):''}
   <div class="actions"><div>${c.id&&STATE.canWrite?'<button class="btn danger sm" id="dr-del">Delete</button>':''}</div><div>${STATE.canWrite?'<button class="btn" id="dr-save">Save</button>':''}</div></div>`;
   if(c.id)wireChallenge(c,'cand');
   $('#dr-close').addEventListener('click',closeDrawer);
-  const live=()=>{const sc={};SCORE_DIMS.forEach(([k])=>{sc[k]=Number($('#s-'+k).value);$('#sv-'+k).textContent=sc[k]});const rec=$$('#c-recipes .chip[aria-pressed="true"]').map(b=>b.dataset.r);const tmp={scores:sc,recipes:rec,moat:$('#c-moat').value};const t=total(tmp);$('#s-total').textContent=t;const ok=meetsBar(tmp);const v=$('#dr-verdict');v.className='verdict '+(ok?'yes':'no');v.textContent=ok?'Meets the unicorn bar':'Below the bar: '+(t<32?'total '+t+'/40':minDim(tmp)<3?'a dimension under 3':!rec.length?'no hiding reason named':'no moat type')};
+  const live=()=>{const sc={};SCORE_DIMS.forEach(([k])=>{sc[k]=Number($('#s-'+k).value);$('#sv-'+k).textContent=sc[k]});const rec=$$('#c-recipes .chip[aria-pressed="true"]').map(b=>b.dataset.r);const tmp={scores:sc,recipes:rec,moat:$('#c-moat').value};const t=total(tmp);$('#s-total').textContent=t;const ok=meetsBar(tmp);const v=$('#dr-verdict');v.className='verdict '+(ok?'yes':'no');v.textContent=ok?'Clears the bar. First, fresh, and nobody has done it.':'Below the bar: '+barFail(tmp)};
   SCORE_DIMS.forEach(([k])=>$('#s-'+k).addEventListener('input',live));$('#c-moat').addEventListener('input',live);
   $$('#c-recipes .chip').forEach(b=>b.addEventListener('click',()=>{if(!STATE.canWrite)return;b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true');live()}));
   if(!STATE.canWrite)panel.querySelectorAll('input,select,textarea').forEach(i=>i.disabled=true);
@@ -467,25 +496,25 @@ function openTerr(id){
   const t=id?STATE.terrs.find(x=>x.id===id):{id:null,name:'',vector:'',keywords:'',status:'digging',notes:'',verdict:'',deadend:'',thread:'',date:today()};
   if(!t)return;drawer.classList.add('open');
   const sim=t.id?[]:[];
-  panel.innerHTML=`<div class="head"><div><div class="eyebrow">Territory record</div><h2>${esc(t.name||'Claim a territory')}</h2></div><button class="btn ghost sm" id="dr-close">Close</button></div>
+  panel.innerHTML=`<div class="head"><div><div class="eyebrow">Ground covered</div><h2>${esc(t.name||'Log new ground')}</h2></div><button class="btn ghost sm" id="dr-close">Close</button></div>
   ${roNote()}<div id="t-warn"></div>
-  ${fld('t-name','Territory',t.name,'input','placeholder="What ground is being dug: a regulation, an industry corner, a dead company…"')}
-  <div class="f2">${self('t-vector','Came in through',t.vector,[['','—'],...STATE.vectors.map(v=>[v.id,v.name])])}${self('t-status','Status',t.status,[['open','Open (claimed, not started)'],['digging','Digging'],['fertile','Fertile (candidates found)'],['exhausted','Exhausted']])}</div>
-  ${fld('t-keywords','Keywords for the overlap check',t.keywords,'input','placeholder="comma separated terms a future hunter might type"')}
-  ${fld('t-notes','Rabbit-hole log: every turn taken, what was read, where it led',t.notes,'textarea','style="min-height:160px"')}
-  ${fld('t-verdict','Verdict',t.verdict,'textarea')}
-  ${fld('t-deadend','Dead-end reason (why there is no windfall here)',t.deadend,'textarea')}
-  ${fld('t-thread','Hanging thread to pull next ("none" if truly done)',t.thread)}
-  ${fld('t-date','Date dug',t.date)}
+  ${fld('t-name','What ground this is',t.name,'input','placeholder="What is being searched: a launch, a rule, a corner of an industry, a dead company…"')}
+  <div class="f2">${self('t-vector','Way in',t.vector,[['','—'],...STATE.vectors.map(v=>[v.id,v.name])])}${self('t-status','Status',t.status,[['open','Open (logged, not started)'],['digging','Being dug'],['fertile','Promising (ideas came out of it)'],['exhausted','Fully searched (nothing here)']])}</div>
+  ${fld('t-keywords','Keywords, so the next person finds this',t.keywords,'input','placeholder="comma separated words someone might type later"')}
+  ${fld('t-notes','Digging notes: every turn taken, what was read, where it led',t.notes,'textarea','style="min-height:160px"')}
+  ${fld('t-verdict','What we found',t.verdict,'textarea')}
+  ${fld('t-deadend','Why there is nothing here (if nothing)',t.deadend,'textarea')}
+  ${fld('t-thread','Loose thread to pull next ("none" if truly done)',t.thread)}
+  ${fld('t-date','Date',t.date)}
   ${t.id?challengeBox(t,'terr'):''}
   <div class="actions"><div>${t.id&&STATE.canWrite?'<button class="btn danger sm" id="dr-del">Delete</button>':''}</div><div>${STATE.canWrite?'<button class="btn" id="dr-save">Save</button>':''}</div></div>`;
   if(t.id)wireChallenge(t,'terr');
   $('#dr-close').addEventListener('click',closeDrawer);
-  if(!t.id){$('#t-name').addEventListener('input',()=>{const q=$('#t-name').value;const m=STATE.terrs.map(x=>[overlap(q,x),x]).filter(x=>x[0]>=0.5).sort((a,b)=>b[0]-a[0]).slice(0,3);$('#t-warn').innerHTML=m.length?`<div class="warn">Possible overlap: ${m.map(([s,x])=>esc(x.name)+' ('+x.status+')').join('; ')}. Check before you dig.</div>`:''})}
+  if(!t.id){$('#t-name').addEventListener('input',()=>{const q=$('#t-name').value;const m=STATE.terrs.map(x=>[overlap(q,x),x]).filter(x=>x[0]>=0.5).sort((a,b)=>b[0]-a[0]).slice(0,3);$('#t-warn').innerHTML=m.length?`<div class="warn">Looks like we covered this already: ${m.map(([s,x])=>esc(x.name)+' ('+lab(x.status)+')').join('; ')}. Check before you dig.</div>`:''})}
   if(!STATE.canWrite)panel.querySelectorAll('input,select,textarea').forEach(i=>i.disabled=true);
   const save=$('#dr-save');if(save)save.addEventListener('click',async()=>{
     const data={name:$('#t-name').value.trim(),vector:$('#t-vector').value,status:$('#t-status').value,keywords:$('#t-keywords').value,notes:$('#t-notes').value,verdict:$('#t-verdict').value,deadend:$('#t-deadend').value,thread:$('#t-thread').value,date:$('#t-date').value||today(),updated:today()};
-    if(!data.name){toast('Name the territory');return}
+    if(!data.name){toast('Name the ground');return}
     save.disabled=true;try{const ref=t.id?db.collection('territories').doc(t.id):db.collection('territories').doc();await ref.set(data);toast('Logged');closeDrawer()}catch(e){toast('Save failed: '+(e&&e.code||'error'));save.disabled=false}
   });
   const del=$('#dr-del');if(del)del.addEventListener('click',async()=>{if(del.dataset.arm!=='1'){del.dataset.arm='1';del.textContent='Confirm delete';return}try{await db.collection('territories').doc(t.id).delete();toast('Deleted');closeDrawer()}catch(e){toast('Delete failed')}});
@@ -510,33 +539,33 @@ $('#jour-new').addEventListener('click',()=>openJour(null));
 // ---------- challenge ----------
 function challengeBox(rec,kind){
   const hist=(rec.challenges||[]);
-  const title=kind==='cand'?'Challenge this candidate':'Challenge this verdict';
-  const sub=kind==='cand'?'Same side of the table. Strongest objection, missing evidence, what would change the verdict, and any new path it opens.':'Was this ground really exhausted? What unconventional turn was missed, and does the dead end point somewhere new?';
+  const title=kind==='cand'?'Challenge this idea':'Challenge this verdict';
+  const sub=kind==='cand'?'A second pair of eyes on our side. What is the strongest objection, what is missing, what would flip the verdict, and what new path does it open?':'Was this ground really fully searched? What turn was missed, and does the dead end point somewhere new?';
   return `<div class="chal" id="chal"><div class="hd"><h4>${title}</h4><div style="display:flex;gap:6px">${sampleFn?`<button class="btn sm" id="chal-go">Challenge</button><button class="btn ghost sm" id="chal-stop" hidden>Stop</button>`:`<span class="ro">challenge needs a Claude viewer</span>`}</div></div><div class="m" style="font-size:13px;color:var(--muted)">${sub}</div><div class="out" id="chal-out" hidden></div><div id="chal-res"></div>${hist.length?`<div class="hist"><div class="eyebrow">Previous challenges</div>${hist.map((h,i)=>`<details ${i===0?'open':''}><summary><span class="pill ${esc(h.verdict)}">${esc(h.verdict)}</span> <span class="mono muted">${esc(h.date)}</span> ${esc((h.summary||'').slice(0,90))}</summary><div class="blk">${renderChal(h,kind,rec,false)}</div></details>`).join('')}</div>`:''}</div>`;
 }
 function renderChal(r,kind,rec,live){
   const li=a=>Array.isArray(a)&&a.length?`<ul>${a.map(x=>`<li>${esc(typeof x==='string'?x:JSON.stringify(x))}</li>`).join('')}</ul>`:'<span class="muted">none</span>';
-  let h=`<div class="blk"><b>Verdict</b><span class="pill ${esc(r.verdict)}">${esc(r.verdict)}</span> ${esc(r.summary||'')}</div>`;
+  let h=`<div class="blk"><b>Verdict</b><span class="pill ${esc(r.verdict)}">${lab(r.verdict)}</span> ${esc(r.summary||'')}</div>`;
   if(kind==='cand'){
     h+=`<div class="blk"><b>Strongest objection</b>${esc(r.strongest_objection||'')}</div>
-    <div class="blk"><b>What would change the verdict</b>${esc(r.what_would_change_my_mind||'')}</div>
-    <div class="blk"><b>Evidence gaps</b>${li(r.evidence_gaps)}</div>
-    <div class="blk"><b>Hidden strengths</b>${li(r.hidden_strengths)}</div>`;
-    if(r.revised_scores){const t=SCORE_DIMS.reduce((a,[k])=>a+(Number(r.revised_scores[k])||0),0);h+=`<div class="blk"><b>Revised scores</b><span class="mono">${SCORE_DIMS.map(([k])=>k+' '+(Number(r.revised_scores[k])||0)).join(' · ')} = ${t}/40</span> · recommends <span class="pill ${esc(r.recommended_status||'')}">${esc(r.recommended_status||'')}</span>${live&&STATE.canWrite?` <button class="btn ghost sm" id="chal-apply">Apply scores and status</button>`:''}</div>`}
+    <div class="blk"><b>What would flip the verdict</b>${esc(r.what_would_change_my_mind||'')}</div>
+    <div class="blk"><b>What is missing</b>${li(r.evidence_gaps)}</div>
+    <div class="blk"><b>Stronger than it looks because</b>${li(r.hidden_strengths)}</div>`;
+    if(r.revised_scores){const t=SCORE_DIMS.reduce((a,[k])=>a+(Number(r.revised_scores[k])||0),0);h+=`<div class="blk"><b>New scores</b><span class="mono">${SCORE_DIMS.map(([k])=>k+' '+(Number(r.revised_scores[k])||0)).join(' · ')} = ${t}/40</span> · recommends <span class="pill ${esc(r.recommended_status||'')}">${lab(r.recommended_status||'')}</span>${live&&STATE.canWrite?` <button class="btn ghost sm" id="chal-apply">Use these scores and status</button>`:''}</div>`}
   }else{
-    h+=`<div class="blk"><b>Missed turns</b>${li(r.missed_turns)}</div>
+    h+=`<div class="blk"><b>Turns that were missed</b>${li(r.missed_turns)}</div>
     <div class="blk"><b>What would reopen it</b>${esc(r.what_would_reopen||'')}</div>`;
-    if(live&&STATE.canWrite&&r.verdict==='reopen')h+=`<div class="blk"><button class="btn ghost sm" id="chal-reopen">Reopen as digging</button></div>`;
+    if(live&&STATE.canWrite&&r.verdict==='reopen')h+=`<div class="blk"><button class="btn ghost sm" id="chal-reopen">Reopen and dig again</button></div>`;
   }
   const paths=Array.isArray(r.new_paths)?r.new_paths:[];
-  h+=`<div class="blk"><b>New paths opened</b>${paths.length?paths.map((p,i)=>`<div class="path"><div><div style="font-weight:600">${esc(p.name||'')}</div><div class="muted" style="font-size:13px">${esc(p.why||'')}${p.vector?` <span class="mono">· ${esc(p.vector)}</span>`:''}</div></div>${live&&STATE.canWrite?`<button class="btn ghost sm" data-claim="${i}">Claim territory</button>`:''}</div>`).join(''):'<span class="muted">none</span>'}</div>`;
+  h+=`<div class="blk"><b>New paths this opens</b>${paths.length?paths.map((p,i)=>`<div class="path"><div><div style="font-weight:600">${esc(p.name||'')}</div><div class="muted" style="font-size:13px">${esc(p.why||'')}${p.vector?` <span class="mono">· ${esc(p.vector)}</span>`:''}</div></div>${live&&STATE.canWrite?`<button class="btn ghost sm" data-claim="${i}">Log as new ground</button>`:''}</div>`).join(''):'<span class="muted">none</span>'}</div>`;
   return h;
 }
 function wireChallenge(rec,kind){
   const go=$('#chal-go');if(!go)return;const stop=$('#chal-stop'),out=$('#chal-out'),res=$('#chal-res');let ctl=null,last=null;
   stop.addEventListener('click',()=>ctl&&ctl.abort());
   go.addEventListener('click',async()=>{
-    ctl=new AbortController();go.disabled=true;stop.hidden=false;out.hidden=false;out.textContent='Thinking… (a first use asks your permission; a deep challenge takes a minute or two)';res.innerHTML='';
+    ctl=new AbortController();go.disabled=true;stop.hidden=false;out.hidden=false;out.textContent='Thinking… (the first time asks your permission; a proper challenge takes a minute or two)';res.innerHTML='';
     const prompt=kind==='cand'?candPrompt(rec):terrPrompt(rec);
     try{
       const r=await sampleFn.json(prompt,{modelTier:'complex',cache:false,signal:ctl.signal,onText:({text})=>{out.textContent=text}});
@@ -555,15 +584,15 @@ function wireChalActions(rec,kind,r){
   const ro=$('#chal-reopen');if(ro)ro.addEventListener('click',async()=>{ro.disabled=true;try{const mt=(r.missed_turns||[]).join(' | ');await db.collection('territories').doc(rec.id).update({status:'digging',thread:(mt?('Reopened by challenge: '+mt+' ').slice(0,400):'')+(rec.thread&&rec.thread!=='none'?' Also: '+rec.thread:'')});toast('Reopened');closeDrawer()}catch(e){toast('Reopen failed');ro.disabled=false}});
   $$('#chal-res [data-claim]').forEach(b=>b.addEventListener('click',async()=>{const p=(r.new_paths||[])[Number(b.dataset.claim)];if(!p)return;b.disabled=true;try{const vec=STATE.vectors.find(v=>v.id===p.vector||v.name===p.vector);await db.collection('territories').doc(slug(p.name)).set({name:p.name,vector:vec?vec.id:'',status:'open',keywords:(p.keywords||''),notes:'Opened by a challenge of '+(kind==='cand'?'candidate':'territory')+' "'+rec.name+'" on '+today()+'. Why: '+(p.why||''),verdict:'',deadend:'',thread:p.first_move||p.why||'',date:today(),updated:today()});b.textContent='Claimed';toast('Territory claimed')}catch(e){toast('Claim failed');b.disabled=false}}));
 }
-const RUBRIC_TXT=()=>'Scoring rubric, 0 to 5 each:\n'+SCORE_DIMS.map(([k,n,d])=>'- '+k+' ('+n+'): '+d).join('\n')+'\nUnicorn bar: total >= 32, no dimension under 3, at least one hiding reason, moat type set.';
-const STANDARD_TXT='We are hunting Windfall Positions: a spot that keeps paying because of where it sits, not what you do from it. The moat must be EXTERNAL (law, contract, physics, geography, history), not skill, hustle or relationships. The window must be datable to a specific recent shift. There must be a specific reason nobody has claimed it. Capital near zero. We want the best of everything, not the best of what one search found. Kill rules: moat is a skill or relationship; window cannot be dated; cannot say why unclaimed; needs real capital or a licence that takes more than weeks; 3+ funded competitors or a listicle of providers exists; it is only here because it was the best thing found.';
+const RUBRIC_TXT=()=>'Scoring, 0 to 5 each:\n'+SCORE_DIMS.map(([k,n,d])=>'- '+k+' ('+n+'): '+d).join('\n')+'\nTo be a unicorn: first >= 4, window >= 3, total >= 30, and at least one reason named for why nobody has done it. Being first is the gate. A head start that keeps others out (the old moat) is a bonus, not a requirement.';
+const STANDARD_TXT='We are hunting Windfall Positions: ideas where being first is the whole trick. The model case is the first AI coloring books on Etsy in 2022: something just made it cheap, buyers were already searching, nobody had connected the two, it took an afternoon and no money, and the first one in became the name of the category. The test: (1) you are first, and that was COUNTED on the surface where that market actually publishes (stores, Google, Reddit, trade press, GitHub), not assumed; (2) the change that made it possible happened in the last few months, with a date; (3) people already look for it somewhere that would show them yours; (4) there is an obvious way to get paid; (5) there is a specific reason nobody has done it; (6) a weekend and no money. A head start that keeps others out is a bonus, not a requirement. Drop it if: it needs skill, contacts or hustle (that is a job); the change cannot be dated; nobody can say why it is unclaimed; it needs real money or a licence that takes more than weeks; it already exists three or more times or a best-of article exists; it is only here because it was the best thing one search found. WRITE EVERYTHING IN PLAIN ENGLISH a smart friend with no business background would understand. No jargon, no acronyms without saying what they mean.';
 function candPrompt(c){
   const rec=STATE.recipes.map(r=>r.id+' = '+r.name).join('; ');const vec=STATE.vectors.map(v=>v.id+' = '+v.name).join('; ');
-  return `You are challenging a business-opportunity candidate on behalf of a hunter who is on the SAME side of the table. The goal is truth, not failure: find the strongest objection, name what evidence is missing, say what would change the verdict, and surface any new path the objection opens. Be specific and cold. Do not flatter. Do not pad.\n\n${STANDARD_TXT}\n\n${RUBRIC_TXT()}\n\nHiding-reason ids: ${rec}\nSearch vector ids: ${vec}\n\nCANDIDATE\nName: ${c.name}\nOne line: ${c.oneline}\nMoat type: ${c.moat}\nStatus: ${c.status}\nDated shift: ${c.shift}\nWindow: ${c.window}\nHiding reasons: ${(c.recipes||[]).join(', ')}\nScores: ${JSON.stringify(c.scores||{})} (total ${total(c)}/40)\nEvidence and plays:\n${(c.evidence||'').slice(0,6000)}\nKill reason: ${c.kill||''}\nNext action: ${c.next||''}\n\nReply with ONLY a JSON object of this shape:\n{"verdict":"holds"|"weakened"|"fails","summary":"2-3 sentences","strongest_objection":"the single best argument against it","what_would_change_my_mind":"the specific fact or test that flips the verdict either way","evidence_gaps":["..."],"hidden_strengths":["things that make it stronger than scored, if any"],"revised_scores":{"moat":0,"mandatory":0,"capital":0,"monetize":0,"pull":0,"window":0,"obscurity":0,"durability":0},"recommended_status":"lead"|"vetting"|"unicorn"|"killed","new_paths":[{"name":"a new territory to dig","why":"why the objection points there","vector":"<vector id>","keywords":"comma separated","first_move":"the first concrete thing to check"}]}\nnew_paths may be empty. Only include a path if it is genuinely promising by the standard above.`;
+  return `You are challenging a business idea on behalf of a hunter who is on the SAME side of the table. The goal is truth, not failure: find the strongest objection, name what evidence is missing, say what would flip the verdict, and surface any new path the objection opens. Be specific and cold. Do not flatter. Do not pad. Plain English only.\n\n${STANDARD_TXT}\n\n${RUBRIC_TXT()}\n\nHiding-reason ids: ${rec}\nSearch vector ids: ${vec}\n\nIDEA\nName: ${c.name}\nOne line: ${c.oneline}\nKind of head start (optional): ${c.moat}\nStatus: ${c.status}\nWhat changed and when: ${c.shift}\nHow long the door stays open: ${c.window}\nWhy nobody has done it: ${(c.recipes||[]).join(', ')}\nScores: ${JSON.stringify(c.scores||{})} (total ${total(c)}/40)\nEvidence and plays:\n${(c.evidence||'').slice(0,6000)}\nKill reason: ${c.kill||''}\nNext action: ${c.next||''}\n\nReply with ONLY a JSON object of this shape:\n{"verdict":"holds"|"weakened"|"fails","summary":"2-3 sentences","strongest_objection":"the single best argument against it","what_would_change_my_mind":"the specific fact or test that flips the verdict either way","evidence_gaps":["..."],"hidden_strengths":["things that make it stronger than scored, if any"],"revised_scores":{"first":0,"mandatory":0,"capital":0,"monetize":0,"pull":0,"window":0,"obscurity":0,"durability":0},"recommended_status":"lead"|"vetting"|"unicorn"|"killed","new_paths":[{"name":"a new territory to dig","why":"why the objection points there","vector":"<vector id>","keywords":"comma separated","first_move":"the first concrete thing to check"}]}\nnew_paths may be empty. Only include a path if it is genuinely promising by the standard above.`;
 }
 function terrPrompt(t){
   const vec=STATE.vectors.map(v=>v.id+' = '+v.name).join('; ');
-  return `You are challenging a hunting territory's verdict on behalf of a hunter on the SAME side of the table. The hunter logged this ground and a verdict. Decide whether the verdict stands or the ground should be reopened, name the unconventional turns that were missed, and surface any new path the dead end points to. Be specific and cold.\n\n${STANDARD_TXT}\n\nSearch vector ids: ${vec}\n\nTERRITORY\nName: ${t.name}\nVector: ${vecName(t.vector)}\nStatus: ${t.status}\nKeywords: ${t.keywords||''}\nRabbit-hole log:\n${(t.notes||'').slice(0,6000)}\nVerdict: ${t.verdict||''}\nDead-end reason: ${t.deadend||''}\nHanging thread: ${t.thread||''}\n\nReply with ONLY a JSON object of this shape:\n{"verdict":"stands"|"reopen","summary":"2-3 sentences","missed_turns":["an unconventional turn the hunter did not take"],"what_would_reopen":"the specific finding that would make this ground fertile","new_paths":[{"name":"a new territory to dig","why":"why this dead end points there","vector":"<vector id>","keywords":"comma separated","first_move":"the first concrete thing to check"}]}\nnew_paths may be empty. Only include a path if it is genuinely promising by the standard above.`;
+  return `You are challenging the verdict on a piece of ground a hunter searched, on the SAME side of the table. Decide whether the verdict stands or the ground should be reopened, name the turns that were missed, and surface any new path the dead end points to. Be specific and cold. Plain English only.\n\n${STANDARD_TXT}\n\nSearch vector ids: ${vec}\n\nTERRITORY\nName: ${t.name}\nVector: ${vecName(t.vector)}\nStatus: ${t.status}\nKeywords: ${t.keywords||''}\nRabbit-hole log:\n${(t.notes||'').slice(0,6000)}\nVerdict: ${t.verdict||''}\nDead-end reason: ${t.deadend||''}\nHanging thread: ${t.thread||''}\n\nReply with ONLY a JSON object of this shape:\n{"verdict":"stands"|"reopen","summary":"2-3 sentences","missed_turns":["an unconventional turn the hunter did not take"],"what_would_reopen":"the specific finding that would make this ground fertile","new_paths":[{"name":"a new territory to dig","why":"why this dead end points there","vector":"<vector id>","keywords":"comma separated","first_move":"the first concrete thing to check"}]}\nnew_paths may be empty. Only include a path if it is genuinely promising by the standard above.`;
 }
 
 // ---------- data ----------
