@@ -441,6 +441,7 @@ function openCand(id){
   ${fld('c-territory','Territory it came from',c.territory)}
   ${fld('c-kill','Kill reason (if killed)',c.kill)}
   <div class="f2">${fld('c-next','Next action',c.next)}${fld('c-deadline','Ship-or-kill deadline (YYYY-MM-DD)',c.deadline||'','input','placeholder="leave blank if no window"')}</div>
+  ${Array.isArray(c.seed)&&c.seed.length?`<details class="chal"><summary style="cursor:pointer;font-weight:600">Seed data (${c.seed.length} rows) · ready to ship</summary><div class="scroll" style="margin-top:8px"><table class="tbl" style="font-size:12.5px"><thead><tr>${Object.keys(c.seed[0]).map(k=>`<th>${esc(k)}</th>`).join('')}</tr></thead><tbody>${c.seed.map(r=>`<tr>${Object.keys(c.seed[0]).map(k=>`<td>${/^https?:\/\//.test(String(r[k]||''))?`<a href="${esc(r[k])}" target="_blank" rel="noopener">link</a>`:esc(r[k])}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`:''}
   ${c.id?challengeBox(c,'cand'):''}
   <div class="actions"><div>${c.id&&STATE.canWrite?'<button class="btn danger sm" id="dr-del">Delete</button>':''}</div><div>${STATE.canWrite?'<button class="btn" id="dr-save">Save</button>':''}</div></div>`;
   if(c.id)wireChallenge(c,'cand');
@@ -451,7 +452,7 @@ function openCand(id){
   if(!STATE.canWrite)panel.querySelectorAll('input,select,textarea').forEach(i=>i.disabled=true);
   const save=$('#dr-save');if(save)save.addEventListener('click',async()=>{
     const sc={};SCORE_DIMS.forEach(([k])=>sc[k]=Number($('#s-'+k).value));
-    const data={name:$('#c-name').value.trim(),oneline:$('#c-oneline').value.trim(),moat:$('#c-moat').value,status:$('#c-status').value,shift:$('#c-shift').value,window:$('#c-window').value,recipes:$$('#c-recipes .chip[aria-pressed="true"]').map(b=>b.dataset.r),scores:sc,evidence:$('#c-evidence').value,territory:$('#c-territory').value,kill:$('#c-kill').value,next:$('#c-next').value,deadline:$('#c-deadline').value.trim(),challenges:c.challenges||[],date:c.date||today(),updated:today()};
+    const data={name:$('#c-name').value.trim(),oneline:$('#c-oneline').value.trim(),moat:$('#c-moat').value,status:$('#c-status').value,shift:$('#c-shift').value,window:$('#c-window').value,recipes:$$('#c-recipes .chip[aria-pressed="true"]').map(b=>b.dataset.r),scores:sc,evidence:$('#c-evidence').value,territory:$('#c-territory').value,kill:$('#c-kill').value,next:$('#c-next').value,deadline:$('#c-deadline').value.trim(),challenges:c.challenges||[],seed:c.seed||[],date:c.date||today(),updated:today()};
     if(!data.name){toast('Name it first');return}
     save.disabled=true;try{const ref=c.id?db.collection('candidates').doc(c.id):db.collection('candidates').doc();await ref.set(data);toast('Saved');closeDrawer()}catch(e){toast('Save failed: '+(e&&e.code||'error'));save.disabled=false}
   });
