@@ -179,7 +179,10 @@ section.tab{display:none}section.tab.active{display:block}
   <section class="tab active" id="tab-board">
     <div class="grid tiles" id="tiles"></div>
     <div class="grid two" style="margin-top:14px">
-      <div class="card"><h3>Unicorns and what is being vetted <span class="eyebrow">by score</span></h3><div class="list" id="board-cands"></div></div>
+      <div>
+        <div class="card"><h3>Ship or kill <span class="eyebrow">windows closing</span></h3><div class="list" id="board-clock"></div></div>
+        <div class="card" style="margin-top:14px"><h3>Unicorns and what is being vetted <span class="eyebrow">by score</span></h3><div class="list" id="board-cands"></div></div>
+      </div>
       <div>
         <div class="card"><h3>Threads left hanging <span class="eyebrow">pull next</span></h3><div class="list" id="board-threads"></div></div>
         <div class="card" style="margin-top:14px"><h3>Latest from the journal</h3><div class="list" id="board-journal"></div></div>
@@ -230,6 +233,9 @@ section.tab{display:none}section.tab.active{display:block}
     <h2>Lead indicators</h2>
     <p class="muted" style="margin:4px 0 12px;max-width:68ch">Built from the past gold rushes below. The most reliable one across every case: a quiet edit to the channel's own help or policy page, one to four months before any press. The strongest disqualifier: a store with no payment rail.</p>
     <div class="playbook" id="signals"></div>
+    <h2 style="margin-top:28px">Behavior maps of live waves</h2>
+    <p class="muted" style="margin:4px 0 12px;max-width:68ch">The method that found the open ground in cycle 3. For a capability tens of millions just acquired, list what people are visibly doing in week three or four, and for each behavior name the scoreboard, status table, log, guide or ritual nobody has made, with the count proving it. Aggregation closes in days; adjudication stays open for weeks.</p>
+    <div class="list" id="waves"></div>
     <h2 style="margin-top:28px">Past flagship moments</h2>
     <p class="muted" style="margin:4px 0 12px;max-width:68ch">What the capability was, which channel routed demand, what the ranking rewarded, how long the window lasted, and what was visible before it opened.</p>
     <div class="list" id="cases"></div>
@@ -273,6 +279,16 @@ section.tab{display:none}section.tab.active{display:block}
       <h2 style="margin-top:20px">The standard</h2>
       <p>We are looking for the best of everything, not the best of what a search happened to turn up. A mediocre find logged as a candidate is worse than an honest dead end, because it pulls attention from the hunt. If a path is wrong, stop walking it. Do not keep following a vector to have something to show. Log the territory as exhausted, write down why, and turn.</p>
       <p>Every record can be challenged with a button. The challenge is not an attempt to fail it. It is a second pair of eyes on the same side of the table: what is the strongest objection, what evidence is missing, what would change the verdict, and what new path does the objection open. A challenge that reopens a dead end or spawns a new territory has done its job as much as one that confirms a unicorn.</p>
+      <h2 style="margin-top:20px">The behavior map</h2>
+      <ol>
+        <li>Find a capability tens of millions of people acquired in the last 30 to 60 days. Verify with a number and a date.</li>
+        <li>From Reddit, X, TikTok, press and support forums, list the five things people are visibly doing with it in week three or four. Behaviors, not features.</li>
+        <li>For each behavior, name the adjudication object nobody has made: the per-company scoreboard, the status table, the dated incident log, the buyer's guide, the ritual with a share object. Not the use-case list. Lists fill in days.</li>
+        <li>Count its absence on the obvious channel. Write the query and what came back.</li>
+        <li>Check the rail and the routing. A page a person finds when the robot calls is routed demand. A page nobody searches for is a plaque.</li>
+        <li>Set a ship-or-kill deadline. The window is the gap between the platform's announcement and its own in-app version. Weeks.</li>
+        <li>Re-run the map every two weeks. A live wave produces a new behavior each week, and each one has an unmade object for about a month.</li>
+      </ol>
       <h2 style="margin-top:20px">Kill rules</h2>
       <ul>
         <li>The moat is a skill, a relationship, or hustle. Kill it. That is an earned advantage, not a windfall.</li>
@@ -324,7 +340,7 @@ const SCORE_DIMS=[
  ['durability','Durability','5 = holds for years once taken. 0 = evaporates fast.'],
 ];
 const MOAT_TYPES=['Flagship by default','Scarce asset','Grandfathered entry','Mandatory stop','Exclusive','Default slot','Orphaned customers','Giant needs you','Locked-in customers','Caught the wave','Handed for free','Irreplaceable data','Only road','Legal for you only'];
-const STATE={cands:[],terrs:[],vectors:[],recipes:[],moats:[],journal:[],signals:[],cases:[],canWrite:false,db:null,uid:null};
+const STATE={cands:[],terrs:[],vectors:[],recipes:[],moats:[],journal:[],signals:[],cases:[],waves:[],canWrite:false,db:null,uid:null};
 let db=null,sampleFn=null;
 function lastChal(x){return (x.challenges&&x.challenges[0])||null}
 function slug(t){return String(t).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||('t-'+Date.now())}
@@ -349,6 +365,8 @@ function renderBoard(){
   $('#tiles').innerHTML=[['gold',u,'Unicorns'],['blue',v,'Vetting'],['accent',l,'Leads'],['red',k,'Killed'],['green',fe,'Fertile territories'],['',ex,'Exhausted territories'],['',dg,'Open / digging']].map(([c,n,l])=>`<div class="tile ${c}"><div class="l">${l}</div><div class="v num">${n}</div></div>`).join('');
   const top=STATE.cands.filter(c=>c.status==='unicorn'||c.status==='vetting').sort((a,b)=>total(b)-total(a)).slice(0,8);
   $('#board-cands').innerHTML=top.length?top.map(c=>`<div class="item ${c.status==='unicorn'?'gold':'accent'} row" data-cand="${esc(c.id)}" style="cursor:pointer"><div class="t">${esc(c.name)} <span class="pill ${esc(c.status)}">${esc(c.status)}</span> <span class="score num">${total(c)}/40</span></div><div class="m">${esc(c.oneline)}</div></div>`).join(''):`<div class="empty">No unicorns yet. The archive fills first, the unicorns come after.</div>`;
+  const live=STATE.cands.filter(c=>c.deadline&&c.status!=='killed').map(c=>({c,days:Math.ceil((new Date(c.deadline+'T00:00:00')-new Date(today()+'T00:00:00'))/86400000)})).sort((a,b)=>a.days-b.days);
+  $('#board-clock').innerHTML=live.length?live.map(({c,days})=>`<div class="item ${days<0?'':days<=3?'accent':'green'} row" data-cand="${esc(c.id)}" style="cursor:pointer;${days<0?'border-left-color:var(--red)':''}"><div class="t">${esc(c.name.slice(0,90))}${c.name.length>90?'…':''} <span class="pill ${days<0?'killed':days<=3?'open':'fertile'}">${days<0?'overdue '+(-days)+'d':days===0?'today':days+'d left'}</span></div><div class="m">${esc((c.next||'').slice(0,160))}</div></div>`).join(''):`<div class="empty">No candidate has a deadline. Windows on platform waves are weeks; set one.</div>`;
   const th=STATE.terrs.filter(t=>t.thread&&t.thread.trim()&&t.thread.trim().toLowerCase()!=='none'&&t.status!=='exhausted').slice(0,8);
   $('#board-threads').innerHTML=th.length?th.map(t=>`<div class="item green row" data-terr="${esc(t.id)}" style="cursor:pointer"><div class="t">${esc(t.name)}</div><div class="m">${esc(t.thread)}</div></div>`).join(''):`<div class="empty">No hanging threads. Claim a territory from the playbook.</div>`;
   const j=STATE.journal.slice(0,4);
@@ -377,6 +395,7 @@ function renderPlaybook(){
 function renderDetector(){
   const w={high:'green',medium:'gold',low:'grey'};
   $('#signals').innerHTML=STATE.signals.length?STATE.signals.map(g=>`<div class="pb"><h4>${esc(g.signal)} <span class="pill ${g.weight==='high'?'fertile':g.weight==='medium'?'unicorn':'exhausted'}">${esc(g.weight)}</span></h4><div class="m">${esc(g.how)}</div><div class="hits">lead time: ${esc(g.lead)}</div></div>`).join(''):'<div class="empty">No signals yet.</div>';
+  $('#waves').innerHTML=STATE.waves.length?STATE.waves.map(w=>`<details class="item accent" ${w.live?'open':''}><summary style="cursor:pointer"><span class="t">${esc(w.name)}</span> <span class="mono muted">${esc(w.date||'')}</span> <span class="pill tag">${esc(w.scale||'')}</span></summary><div class="m" style="margin-top:8px">${(w.behaviors||[]).map(b=>`<div style="margin-bottom:8px"><b>${esc(b.behavior)}</b><br><span class="muted">Unmade:</span> ${esc(b.missing)}<br><span class="muted">Count:</span> ${esc(b.count||'')}${b.rail?`<br><span class="muted">Rail:</span> ${esc(b.rail)}`:''}</div>`).join('')}${w.notes?`<div class="muted" style="margin-top:6px">${esc(w.notes)}</div>`:''}</div></details>`).join(''):'<div class="empty">No wave mapped yet.</div>';
   $('#cases').innerHTML=STATE.cases.length?STATE.cases.map(c=>`<details class="item"><summary style="cursor:pointer"><span class="t">${esc(c.name)}</span></summary><div class="m" style="margin-top:6px"><b>Capability:</b> ${esc(c.capability)}<br><b>Channel:</b> ${esc(c.channel)}<br><b>What the ranking rewarded:</b> ${esc(c.ranking)}<br><b>Timeline:</b> ${esc(c.timeline)}<br><b>Early earnings:</b> ${esc(c.earnings)}<br><b>Visible before it opened:</b><ul style="margin:4px 0 0;padding-left:18px">${(c.lead_indicators||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${(c.sources||[]).length?`<div class="mono" style="margin-top:6px">${c.sources.map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\//,'').slice(0,60))}</a>`).join(' · ')}</div>`:''}</div></details>`).join(''):'<div class="empty">No cases yet.</div>';
 }
 function renderJournal(){
@@ -421,7 +440,7 @@ function openCand(id){
   ${fld('c-evidence','Evidence, sources, rabbit-hole notes',c.evidence,'textarea','style="min-height:120px"')}
   ${fld('c-territory','Territory it came from',c.territory)}
   ${fld('c-kill','Kill reason (if killed)',c.kill)}
-  ${fld('c-next','Next action',c.next)}
+  <div class="f2">${fld('c-next','Next action',c.next)}${fld('c-deadline','Ship-or-kill deadline (YYYY-MM-DD)',c.deadline||'','input','placeholder="leave blank if no window"')}</div>
   ${c.id?challengeBox(c,'cand'):''}
   <div class="actions"><div>${c.id&&STATE.canWrite?'<button class="btn danger sm" id="dr-del">Delete</button>':''}</div><div>${STATE.canWrite?'<button class="btn" id="dr-save">Save</button>':''}</div></div>`;
   if(c.id)wireChallenge(c,'cand');
@@ -432,7 +451,7 @@ function openCand(id){
   if(!STATE.canWrite)panel.querySelectorAll('input,select,textarea').forEach(i=>i.disabled=true);
   const save=$('#dr-save');if(save)save.addEventListener('click',async()=>{
     const sc={};SCORE_DIMS.forEach(([k])=>sc[k]=Number($('#s-'+k).value));
-    const data={name:$('#c-name').value.trim(),oneline:$('#c-oneline').value.trim(),moat:$('#c-moat').value,status:$('#c-status').value,shift:$('#c-shift').value,window:$('#c-window').value,recipes:$$('#c-recipes .chip[aria-pressed="true"]').map(b=>b.dataset.r),scores:sc,evidence:$('#c-evidence').value,territory:$('#c-territory').value,kill:$('#c-kill').value,next:$('#c-next').value,date:c.date||today(),updated:today()};
+    const data={name:$('#c-name').value.trim(),oneline:$('#c-oneline').value.trim(),moat:$('#c-moat').value,status:$('#c-status').value,shift:$('#c-shift').value,window:$('#c-window').value,recipes:$$('#c-recipes .chip[aria-pressed="true"]').map(b=>b.dataset.r),scores:sc,evidence:$('#c-evidence').value,territory:$('#c-territory').value,kill:$('#c-kill').value,next:$('#c-next').value,deadline:$('#c-deadline').value.trim(),challenges:c.challenges||[],date:c.date||today(),updated:today()};
     if(!data.name){toast('Name it first');return}
     save.disabled=true;try{const ref=c.id?db.collection('candidates').doc(c.id):db.collection('candidates').doc();await ref.set(data);toast('Saved');closeDrawer()}catch(e){toast('Save failed: '+(e&&e.code||'error'));save.disabled=false}
   });
@@ -553,7 +572,7 @@ renderAll();
   if(STATE.canWrite){$('#cand-new').hidden=false;$('#terr-new').hidden=false;$('#jour-new').hidden=false}
   $('#who').innerHTML=`<b>${STATE.canWrite?'hunter':'observer'}</b><br>ledger live`;
   const sub=(col,key,order)=>{let q=db.collection(col);if(order)q=q.orderBy(order[0],order[1]);q.onSnapshot(s=>{STATE[key]=s.docs.filter(d=>d.exists).map(d=>({id:d.id,...d.data()}));renderAll()},e=>{$('#who').innerHTML='<b>ledger error</b><br>'+esc(e.code)})};
-  sub('candidates','cands');sub('territories','terrs',['date','desc']);sub('vectors','vectors',['order','asc']);sub('recipes','recipes',['order','asc']);sub('moats','moats',['order','asc']);sub('journal','journal',['date','desc']);sub('signals','signals',['order','asc']);sub('cases','cases',['order','asc']);
+  sub('candidates','cands');sub('territories','terrs',['date','desc']);sub('vectors','vectors',['order','asc']);sub('recipes','recipes',['order','asc']);sub('moats','moats',['order','asc']);sub('journal','journal',['date','desc']);sub('signals','signals',['order','asc']);sub('cases','cases',['order','asc']);sub('waves','waves',['date','desc']);
 })();
 })();
 </script>
