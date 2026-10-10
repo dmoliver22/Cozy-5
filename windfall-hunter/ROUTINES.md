@@ -13,6 +13,8 @@ An idea is a unicorn only if: "Are you first?" is 4 or 5 by a count you ran; "Di
 
 ## Routine A: Monday early-warning scan and clock check
 
+0. Read the `counts` collection first. Any count marked `done` carries a `result` written by a person with store access; treat it as the best evidence in the ledger and update the related candidate or territory before anything else. Any count still `open` past its `due` date: note it in the journal, do not silently drop it.
+
 1. Read the `signals` collection (19 early warnings, each with a `now` field saying what was firing last time).
 2. Run the forward scan with a subagent: new repos since the last scan in the GitHub orgs of Meta (meta-models, facebookincubator, facebookresearch), OpenAI, Anthropic, Google (google, google-gemini, google-deepmind), Apple, Microsoft, Amazon, NVIDIA, xAI, Mistral, Perplexity, Stripe, Shopify, Cloudflare, ByteDance, Tencent, Alibaba, DeepSeek, Moonshot; repos created in the last 30 days with more than 3,000 stars and what they prove for a normal person; first-port latency and derivative counts for any official kit; every "non-commercial", "no selling" or device-cap clause in kit terms; any new "does it work here" status page for consumer agents. Also scan headlines (The Information, Bloomberg, Reuters, TechCrunch, TestingCatalog) for code names, earnings-call category language, insider security leaks ahead of a launch, and app-store listings under a big company's developer id.
 3. Update each signal's `now` field with what is firing today and the date, in plain English. Correct anything last week got wrong.
