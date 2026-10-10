@@ -182,6 +182,7 @@ section.tab{display:none}section.tab.active{display:block}
     <div class="grid two" style="margin-top:14px">
       <div>
         <div class="card"><h3>Clock is ticking <span class="eyebrow">ship it or drop it by the date</span></h3><div class="list" id="board-clock"></div></div>
+        <div class="card" style="margin-top:14px"><h3>Counts that need a person with a browser <span class="eyebrow">this machine cannot open most stores</span></h3><div class="list" id="board-counts"></div></div>
         <div class="card" style="margin-top:14px"><h3>Best ideas right now <span class="eyebrow">unicorns and ideas being checked, by score</span></h3><div class="list" id="board-cands"></div></div>
       </div>
       <div>
@@ -396,7 +397,7 @@ const LABELS={unicorn:'Unicorn',vetting:'Being checked',lead:'Lead',killed:'Drop
 function lab(s){return LABELS[s]||s||''}
 function barFail(c){const sc=k=>Number(c.scores&&c.scores[k])||0;if(c.lane==='arbitrage'){if(sc('window')<3)return 'the gap is not shown to exist today (needs 3 or more, measured)';if(sc('monetize')<4)return 'the gap after fees is not clearly worth it (needs 4 or 5)';if(sc('capital')<4)return 'needs real money up front (needs 4 or 5)';if(total(c)<28)return 'total '+total(c)+'/40, needs 28';if(!(c.recipes||[]).length)return 'no reason named for why the gap is still open';return ''}if(sc('first')<BAR.first)return 'not clearly first yet (needs 4 or 5, counted)';if(sc('window')<BAR.window)return 'the door did not just open (needs 3 or more)';if(total(c)<BAR.total)return 'total '+total(c)+'/40, needs '+BAR.total;if(!(c.recipes||[]).length)return 'no reason named for why nobody has done it';return ''}
 const MOAT_TYPES=['Flagship by default','Scarce asset','Grandfathered entry','Mandatory stop','Exclusive','Default slot','Orphaned customers','Giant needs you','Locked-in customers','Caught the wave','Handed for free','Irreplaceable data','Only road','Legal for you only'];
-const STATE={cands:[],terrs:[],vectors:[],recipes:[],moats:[],journal:[],signals:[],cases:[],waves:[],shelves:[],canWrite:false,db:null,uid:null};
+const STATE={cands:[],terrs:[],vectors:[],recipes:[],moats:[],journal:[],signals:[],cases:[],waves:[],shelves:[],counts:[],canWrite:false,db:null,uid:null};
 let db=null,sampleFn=null;
 function lastChal(x){return (x.challenges&&x.challenges[0])||null}
 function slug(t){return String(t).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||('t-'+Date.now())}
@@ -423,6 +424,8 @@ function renderBoard(){
   $('#board-cands').innerHTML=top.length?top.map(c=>`<div class="item ${c.status==='unicorn'?'gold':'accent'} row" data-cand="${esc(c.id)}" style="cursor:pointer"><div class="t">${esc(c.name)} <span class="pill ${esc(c.status)}">${lab(c.status)}</span>${c.lane==='arbitrage'?' <span class="pill tag">arbitrage</span>':''} <span class="score num">${total(c)}/40</span></div><div class="m">${esc(c.oneline)}</div></div>`).join(''):`<div class="empty">No unicorns yet. The archive fills up first; the unicorns come after.</div>`;
   const live=STATE.cands.filter(c=>c.deadline&&c.status!=='killed').map(c=>({c,days:Math.ceil((new Date(c.deadline+'T00:00:00')-new Date(today()+'T00:00:00'))/86400000)})).sort((a,b)=>a.days-b.days);
   $('#board-clock').innerHTML=live.length?live.map(({c,days})=>`<div class="item ${days<0?'':days<=3?'accent':'green'} row" data-cand="${esc(c.id)}" style="cursor:pointer;${days<0?'border-left-color:var(--red)':''}"><div class="t">${esc(c.name.slice(0,90))}${c.name.length>90?'…':''} <span class="pill ${days<0?'killed':days<=3?'open':'fertile'}">${days<0?'overdue '+(-days)+'d':days===0?'today':days+'d left'}</span></div><div class="m">${esc((c.next||'').slice(0,160))}</div></div>`).join(''):`<div class="empty">No idea has a date yet. On a big launch the window is weeks, so set one.</div>`;
+  const cts=STATE.counts.filter(x=>x.status!=='done').sort((a,b)=>String(a.due||'9999').localeCompare(String(b.due||'9999')));
+  $('#board-counts').innerHTML=cts.length?cts.map(x=>`<div class="item accent"><div class="t">${esc(x.what)} <span class="pill tag">${esc(x.minutes||'')}${x.minutes?' min':''}</span>${x.due?` <span class="mono muted">by ${esc(x.due)}</span>`:''}</div><div class="m">${esc(x.how||'')}${x.url?` <a href="${esc(x.url)}" target="_blank" rel="noopener">open</a>`:''}<br><span class="muted">Why it matters:</span> ${esc(x.why||'')}${STATE.canWrite?` <button class="btn ghost sm" data-count-done="${esc(x.id)}" style="margin-left:6px">Done</button>`:''}</div></div>`).join(''):`<div class="empty">Nothing waiting on a person right now.</div>`;
   const th=STATE.terrs.filter(t=>t.thread&&t.thread.trim()&&t.thread.trim().toLowerCase()!=='none'&&t.status!=='exhausted').slice(0,8);
   $('#board-threads').innerHTML=th.length?th.map(t=>`<div class="item green row" data-terr="${esc(t.id)}" style="cursor:pointer"><div class="t">${esc(t.name)}</div><div class="m">${esc(t.thread)}</div></div>`).join(''):`<div class="empty">No loose threads. Pick a way in from "Where to look" and log new ground.</div>`;
   const j=STATE.journal.slice(0,4);
@@ -474,6 +477,7 @@ $('#terr-check').addEventListener('input',()=>{
   const c=STATE.cands.map(t=>[overlap(q,{name:t.name,keywords:t.oneline,notes:t.evidence,verdict:t.window}),t]).filter(x=>x[0]>0).sort((a,b)=>b[0]-a[0]).slice(0,4);
   out.innerHTML=(m.length||c.length)?m.map(([s,t])=>`<div class="item ${t.status==='exhausted'?'':'green'} row" data-terr="${esc(t.id)}" style="cursor:pointer"><div class="t">${esc(t.name)} <span class="pill ${esc(t.status)}">${lab(t.status)}</span> <span class="mono muted">${Math.round(s*100)}% match</span></div><div class="m">${esc(t.deadend||t.verdict||t.notes||'')}</div></div>`).join('')+c.map(([s,t])=>`<div class="item accent row" data-cand="${esc(t.id)}" style="cursor:pointer"><div class="t">${esc(t.name)} <span class="pill ${esc(t.status)}">${lab(t.status)}</span> <span class="mono muted">candidate · ${Math.round(s*100)}% match</span></div><div class="m">${esc(t.oneline)}</div></div>`).join(''):`<div class="item green"><div class="t">Clear ground.</div><div class="m">Nothing in the archive matches. Log it as new ground before you start digging.</div></div>`;
 });
+document.addEventListener('click',async e=>{const d=e.target.closest('[data-count-done]');if(d&&db){const res=prompt('What did you find? One or two sentences (this is saved on the count and the next scan reads it).');if(res===null)return;try{await db.collection('counts').doc(d.dataset.countDone).update({status:'done',result:res,done:today()});toast('Saved')}catch(err){toast('Save failed')}return}});
 document.addEventListener('click',e=>{const r=e.target.closest('[data-cand],[data-terr],[data-jour]');if(!r)return;if(r.dataset.cand)openCand(r.dataset.cand);else if(r.dataset.terr)openTerr(r.dataset.terr);else if(r.dataset.jour)openJour(r.dataset.jour)});
 
 // ---------- drawer ----------
@@ -637,7 +641,7 @@ renderAll();
   if(STATE.canWrite){$('#cand-new').hidden=false;$('#terr-new').hidden=false;$('#jour-new').hidden=false}
   $('#who').innerHTML=`<b>${STATE.canWrite?'hunter':'observer'}</b><br>ledger live`;
   const sub=(col,key,order)=>{let q=db.collection(col);if(order)q=q.orderBy(order[0],order[1]);q.onSnapshot(s=>{STATE[key]=s.docs.filter(d=>d.exists).map(d=>({id:d.id,...d.data()}));renderAll()},e=>{$('#who').innerHTML='<b>ledger error</b><br>'+esc(e.code)})};
-  sub('candidates','cands');sub('territories','terrs',['date','desc']);sub('vectors','vectors',['order','asc']);sub('recipes','recipes',['order','asc']);sub('moats','moats',['order','asc']);sub('journal','journal',['date','desc']);sub('signals','signals',['order','asc']);sub('cases','cases',['order','asc']);sub('waves','waves',['date','desc']);sub('shelves','shelves',['name','asc']);
+  sub('candidates','cands');sub('territories','terrs',['date','desc']);sub('vectors','vectors',['order','asc']);sub('recipes','recipes',['order','asc']);sub('moats','moats',['order','asc']);sub('journal','journal',['date','desc']);sub('signals','signals',['order','asc']);sub('cases','cases',['order','asc']);sub('waves','waves',['date','desc']);sub('shelves','shelves',['name','asc']);sub('counts','counts',['due','asc']);
 })();
 })();
 </script>
