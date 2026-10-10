@@ -41,7 +41,7 @@ Every idea has a `lane`: `first` or `arbitrage`. Arbitrage ideas have their own 
 
 ## Win-win-win (both routines)
 
-The third lane: three parties each gain (the buyer, a partner or platform, you) and the other two bring people to you. Bar on the "How this works" tab. The cleanest form is a platform paying for growth during a launch window (referral bounties, zero-fee periods, creator funds, seller incentives) with an end date; record the end date as the window. Routine A: re-check every live win-win-win idea's end date and whether the other parties are still promoting it. Routine B: run one win-win-win hunter alongside the wave map, listing every platform incentive currently open with its value, who pays, who gains, and when it ends.
+The third lane: three parties each gain (the buyer, a partner or platform, you) and the other two bring people to you. Bar on the "How this works" tab. The cleanest form is a platform paying for growth during a launch window (referral bounties, zero-fee periods, creator funds, seller incentives) with an end date; record the end date as the window. Routine A: re-check every live win-win-win idea's end date and whether the other parties are still promoting it. Routine B: run one win-win-win hunter alongside the wave map, limited to incentives that STARTED in the last 60 days, pay a cash or cash-like 'you' leg, and allow public sharing (read the personal-use clause first). Standing referral programs are logged once and never re-dug.
 
 ## Lane lock
 
