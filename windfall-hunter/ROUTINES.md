@@ -38,6 +38,10 @@ Every idea has a `lane`: `first` or `arbitrage`. Arbitrage ideas have their own 
 - Routine A (Monday): re-measure every live arbitrage idea on both sides. If the gap has closed, drop it with the date and what closed it. Record the new net gap in `evidence`.
 - Routine B (fortnightly): run one arbitrage hunter alongside the wave map, covering royalty gaps between shelves, country price gaps on legitimately resellable goods, fee-change windows, points and credits, clearance and retirement, platform-to-platform spreads, and payout or currency gaps. At most four gaps, each measured with fees and inside the rules.
 
+## Win-win-win (both routines)
+
+The third lane: three parties each gain (the buyer, a partner or platform, you) and the other two bring people to you. Bar on the "How this works" tab. The cleanest form is a platform paying for growth during a launch window (referral bounties, zero-fee periods, creator funds, seller incentives) with an end date; record the end date as the window. Routine A: re-check every live win-win-win idea's end date and whether the other parties are still promoting it. Routine B: run one win-win-win hunter alongside the wave map, listing every platform incentive currently open with its value, who pays, who gains, and when it ends.
+
 ## Lane lock
 
 Never two hunts in a row in the same lane. Read the last two `journal` entries before choosing where to look.
