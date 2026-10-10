@@ -29,6 +29,13 @@ An idea is a unicorn only if: "Are you first?" is 4 or 5 by a count you ran; "Di
 4. File anything that scores first 4 or more and has a rail as a candidate (status `lead`, deadline inside two weeks). File each mapped wave as a `waves` document and the sweep as an exhausted `territories` document listing what was checked and set aside, so nothing is dug twice.
 5. Write a `journal` entry of kind `cycle` titled "Wave map, <date>".
 
+## Arbitrage (both routines)
+
+Every idea has a `lane`: `first` or `arbitrage`. Arbitrage ideas have their own bar (see the "How this works" tab): the gap must be measured today on both sides after every fee, the door score 3 or more, easy-to-get-paid and costs-nothing 4 or 5, total 28 or more, a reason named for why the gap is open, and the closing mechanism written down. Anything outside a platform's rules, a law or a licence is dropped as a ban.
+
+- Routine A (Monday): re-measure every live arbitrage idea on both sides. If the gap has closed, drop it with the date and what closed it. Record the new net gap in `evidence`.
+- Routine B (fortnightly): run one arbitrage hunter alongside the wave map, covering royalty gaps between shelves, country price gaps on legitimately resellable goods, fee-change windows, points and credits, clearance and retirement, platform-to-platform spreads, and payout or currency gaps. At most four gaps, each measured with fees and inside the rules.
+
 ## Lane lock
 
 Never two hunts in a row in the same lane. Read the last two `journal` entries before choosing where to look.
