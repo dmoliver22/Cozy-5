@@ -21,4 +21,4 @@ and which carry a specific reason nobody has claimed them yet.
 | `moats`       | kinds of head start (optional; being first is the gate) |
 | `journal`     | cycle logs, insights, decisions, pivots |
 
-Unicorn bar: "Are you first?" 4 or 5 (counted), "Did the door just open?" 3 or more, total 30 or more, one reason named for why nobody has done it, and a survived challenge. Score key `first` replaced `moat` on Oct 9 2026.
+Unicorn bar: "Are you first?" 4 or 5 (counted), "Did the door just open?" 3 or more, total 30 or more, one reason named for why nobody has done it, and a survived challenge. Score key `first` replaced `moat` on Oct 9 2026. Candidates carry `lane`: `first` (default) or `arbitrage`; arbitrage ideas use a different bar (window >= 3, monetize >= 4, capital >= 4, total >= 28, a reason named, and the closing mechanism written down).

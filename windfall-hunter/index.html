@@ -195,6 +195,7 @@ section.tab{display:none}section.tab.active{display:block}
     <div class="toolbar">
       <input id="cand-q" placeholder="Search ideas…">
       <select id="cand-status"><option value="">Any status</option><option value="unicorn">Unicorn</option><option value="vetting">Being checked</option><option value="lead">Lead</option><option value="killed">Dropped</option></select>
+      <select id="cand-lane"><option value="">Any kind of idea</option><option value="first">Be first</option><option value="arbitrage">Arbitrage</option></select>
       <select id="cand-moat"><option value="">Any kind of head start</option></select>
       <button class="btn" id="cand-new" hidden>+ Idea</button>
     </div>
@@ -277,6 +278,7 @@ section.tab{display:none}section.tab.active{display:block}
         <li><b>Way in.</b> A kind of place where first-mover ideas hide. The list is on "Where to look".</li>
         <li><b>Wave.</b> Millions of people getting a new thing at once. Waves create new behaviors, and each new behavior needs a page, a table or a guide that nobody has made yet.</li>
         <li><b>Early warning.</b> A sign a wave is coming before it is news.</li>
+        <li><b>Arbitrage.</b> The second kind of idea in this ledger. Buy or get something in one place, sell it in another, and the gap between the two prices is the whole idea. Being first does not matter; the gap matters. It has its own bar, below.</li>
         <li><b>Challenge.</b> The button on every record. A second pair of eyes on our side: the strongest objection, what is missing, what would flip the verdict, and what new path opens.</li>
       </ul>
 
@@ -295,6 +297,9 @@ section.tab{display:none}section.tab.active{display:block}
       <p>Eight questions, each 0 to 5: Are you first? Will people come looking? Costs nothing to start? Easy to get paid? Do they come to you? Did the door just open? Is there a reason nobody has done it? Does being first keep paying?</p>
       <div class="callout">To be called a unicorn: "Are you first?" must be 4 or 5. "Did the door just open?" must be 3 or more. The total must be 30 or more. One reason must be named for why nobody has done it. And it must have survived a challenge. Never round up. If a score is low, write why.</div>
 
+      <h2 style="margin-top:20px">Arbitrage: the second kind of idea</h2>
+      <p>Some windfalls are not about being first. They are about a gap: the same thing costs less in one place than it sells for in another, and nobody is carrying it across. A game key priced for one country and sold in another. A product on clearance in one store and at full price on a marketplace. Points or credits that cash out for more than they cost. A royalty that pays 70 percent on one shelf and 40 on another for the same file. The gap is the idea, and it closes the moment enough people see it.</p>
+      <div class="callout">The arbitrage bar: the gap must be <b>measured today on both sides, after every fee</b> (the two prices, the fees, the shipping, the tax, the time); "did the door just open" must be 3 or more; "easy to get paid" and "costs nothing to start" must be 4 or 5; total 28 or more; one reason named for why the gap is still open; and you must write down <b>what will close it</b> (a price match, a rule change, a copycat, a currency move). Anything that breaks a store's rules, a law, or a licence is not arbitrage, it is a ban waiting to happen: drop it.</div>
       <h2 style="margin-top:20px">How the hunt runs</h2>
       <ol>
         <li><b>Check the archive first.</b> Type the idea into "Has this been searched already?". If the ground is fully searched, do not dig it again. If it is promising with a loose thread, pull that thread.</li>
@@ -389,7 +394,7 @@ const SCORE_DIMS=[
 const BAR={first:4,window:3,total:30};
 const LABELS={unicorn:'Unicorn',vetting:'Being checked',lead:'Lead',killed:'Dropped',open:'Open',digging:'Being dug',fertile:'Promising',exhausted:'Fully searched',holds:'Holds up',weakened:'Weakened',fails:'Falls apart',stands:'Stands',reopen:'Reopen it'};
 function lab(s){return LABELS[s]||s||''}
-function barFail(c){const sc=k=>Number(c.scores&&c.scores[k])||0;if(sc('first')<BAR.first)return 'not clearly first yet (needs 4 or 5, counted)';if(sc('window')<BAR.window)return 'the door did not just open (needs 3 or more)';if(total(c)<BAR.total)return 'total '+total(c)+'/40, needs '+BAR.total;if(!(c.recipes||[]).length)return 'no reason named for why nobody has done it';return ''}
+function barFail(c){const sc=k=>Number(c.scores&&c.scores[k])||0;if(c.lane==='arbitrage'){if(sc('window')<3)return 'the gap is not shown to exist today (needs 3 or more, measured)';if(sc('monetize')<4)return 'the gap after fees is not clearly worth it (needs 4 or 5)';if(sc('capital')<4)return 'needs real money up front (needs 4 or 5)';if(total(c)<28)return 'total '+total(c)+'/40, needs 28';if(!(c.recipes||[]).length)return 'no reason named for why the gap is still open';return ''}if(sc('first')<BAR.first)return 'not clearly first yet (needs 4 or 5, counted)';if(sc('window')<BAR.window)return 'the door did not just open (needs 3 or more)';if(total(c)<BAR.total)return 'total '+total(c)+'/40, needs '+BAR.total;if(!(c.recipes||[]).length)return 'no reason named for why nobody has done it';return ''}
 const MOAT_TYPES=['Flagship by default','Scarce asset','Grandfathered entry','Mandatory stop','Exclusive','Default slot','Orphaned customers','Giant needs you','Locked-in customers','Caught the wave','Handed for free','Irreplaceable data','Only road','Legal for you only'];
 const STATE={cands:[],terrs:[],vectors:[],recipes:[],moats:[],journal:[],signals:[],cases:[],waves:[],shelves:[],canWrite:false,db:null,uid:null};
 let db=null,sampleFn=null;
@@ -411,11 +416,11 @@ function overlap(q,t){const a=new Set(tokens(q));if(!a.size)return 0;const b=new
 // ---------- render ----------
 function renderAll(){renderBoard();renderCands();renderTerrs();renderPlaybook();renderDetector();renderShelves();renderJournal();$('#ct-shelf').textContent=STATE.shelves.length||'';$('#ct-sig').textContent=STATE.signals.length||'';$('#ct-cand').textContent=STATE.cands.length||'';$('#ct-terr').textContent=STATE.terrs.length||'';$('#ct-jour').textContent=STATE.journal.length||'';}
 function renderBoard(){
-  const u=STATE.cands.filter(c=>c.status==='unicorn').length,v=STATE.cands.filter(c=>c.status==='vetting').length,l=STATE.cands.filter(c=>c.status==='lead').length,k=STATE.cands.filter(c=>c.status==='killed').length;
+  const u=STATE.cands.filter(c=>c.status==='unicorn').length,v=STATE.cands.filter(c=>c.status==='vetting').length,l=STATE.cands.filter(c=>c.status==='lead').length,k=STATE.cands.filter(c=>c.status==='killed').length,ab=STATE.cands.filter(c=>c.lane==='arbitrage'&&c.status!=='killed').length;
   const ex=STATE.terrs.filter(t=>t.status==='exhausted').length,fe=STATE.terrs.filter(t=>t.status==='fertile').length,dg=STATE.terrs.filter(t=>t.status==='digging'||t.status==='open').length;
-  $('#tiles').innerHTML=[['gold',u,'Unicorns'],['blue',v,'Being checked'],['accent',l,'Leads'],['red',k,'Dropped'],['green',fe,'Ground with promise'],['',ex,'Ground fully searched'],['',dg,'Being dug now']].map(([c,n,l])=>`<div class="tile ${c}"><div class="l">${l}</div><div class="v num">${n}</div></div>`).join('');
+  $('#tiles').innerHTML=[['gold',u,'Unicorns'],['blue',v,'Being checked'],['accent',l,'Leads'],['green',ab,'Arbitrage, live'],['red',k,'Dropped'],['green',fe,'Ground with promise'],['',ex,'Ground fully searched'],['',dg,'Being dug now']].map(([c,n,l])=>`<div class="tile ${c}"><div class="l">${l}</div><div class="v num">${n}</div></div>`).join('');
   const top=STATE.cands.filter(c=>c.status==='unicorn'||c.status==='vetting').sort((a,b)=>total(b)-total(a)).slice(0,8);
-  $('#board-cands').innerHTML=top.length?top.map(c=>`<div class="item ${c.status==='unicorn'?'gold':'accent'} row" data-cand="${esc(c.id)}" style="cursor:pointer"><div class="t">${esc(c.name)} <span class="pill ${esc(c.status)}">${lab(c.status)}</span> <span class="score num">${total(c)}/40</span></div><div class="m">${esc(c.oneline)}</div></div>`).join(''):`<div class="empty">No unicorns yet. The archive fills up first; the unicorns come after.</div>`;
+  $('#board-cands').innerHTML=top.length?top.map(c=>`<div class="item ${c.status==='unicorn'?'gold':'accent'} row" data-cand="${esc(c.id)}" style="cursor:pointer"><div class="t">${esc(c.name)} <span class="pill ${esc(c.status)}">${lab(c.status)}</span>${c.lane==='arbitrage'?' <span class="pill tag">arbitrage</span>':''} <span class="score num">${total(c)}/40</span></div><div class="m">${esc(c.oneline)}</div></div>`).join(''):`<div class="empty">No unicorns yet. The archive fills up first; the unicorns come after.</div>`;
   const live=STATE.cands.filter(c=>c.deadline&&c.status!=='killed').map(c=>({c,days:Math.ceil((new Date(c.deadline+'T00:00:00')-new Date(today()+'T00:00:00'))/86400000)})).sort((a,b)=>a.days-b.days);
   $('#board-clock').innerHTML=live.length?live.map(({c,days})=>`<div class="item ${days<0?'':days<=3?'accent':'green'} row" data-cand="${esc(c.id)}" style="cursor:pointer;${days<0?'border-left-color:var(--red)':''}"><div class="t">${esc(c.name.slice(0,90))}${c.name.length>90?'…':''} <span class="pill ${days<0?'killed':days<=3?'open':'fertile'}">${days<0?'overdue '+(-days)+'d':days===0?'today':days+'d left'}</span></div><div class="m">${esc((c.next||'').slice(0,160))}</div></div>`).join(''):`<div class="empty">No idea has a date yet. On a big launch the window is weeks, so set one.</div>`;
   const th=STATE.terrs.filter(t=>t.thread&&t.thread.trim()&&t.thread.trim().toLowerCase()!=='none'&&t.status!=='exhausted').slice(0,8);
@@ -424,10 +429,10 @@ function renderBoard(){
   $('#board-journal').innerHTML=j.length?j.map(e=>`<div class="item"><div class="t">${esc(e.title)} <span class="pill tag">${esc(e.kind)}</span> <span class="mono muted">${esc(e.date)}</span></div><div class="m">${esc((e.body||'').slice(0,220))}${(e.body||'').length>220?'…':''}</div></div>`).join(''):`<div class="empty">Nothing logged yet.</div>`;
 }
 function renderCands(){
-  const q=$('#cand-q').value.toLowerCase(),st=$('#cand-status').value,mo=$('#cand-moat').value;
+  const q=$('#cand-q').value.toLowerCase(),st=$('#cand-status').value,mo=$('#cand-moat').value,ln=$('#cand-lane').value;
   const sel=$('#cand-moat');if(sel.options.length<2){MOAT_TYPES.forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;sel.appendChild(o)})}
-  const rows=STATE.cands.filter(c=>(!st||c.status===st)&&(!mo||c.moat===mo)&&(!q||[c.name,c.oneline,c.evidence,c.window].join(' ').toLowerCase().includes(q))).sort((a,b)=>({unicorn:0,vetting:1,lead:2,killed:3}[a.status]-{unicorn:0,vetting:1,lead:2,killed:3}[b.status])||total(b)-total(a));
-  $('#cand-tbl tbody').innerHTML=rows.length?rows.map(c=>`<tr class="row" data-cand="${esc(c.id)}"><td><div class="name">${esc(c.name)}</div><div class="sub">${esc(c.oneline)}</div></td><td class="mono">${esc(c.moat||'—')}</td><td class="sub">${esc((c.window||'').slice(0,90))}</td><td><div class="score num">${total(c)}<span class="muted">/40</span></div><div class="bar ${meetsBar(c)?'gold':''}"><i style="width:${total(c)/40*100}%"></i></div></td><td><span class="pill ${esc(c.status)}">${lab(c.status)}</span>${meetsBar(c)&&c.status!=='unicorn'?'<div class="mono muted" style="margin-top:4px">clears the bar</div>':''}${lastChal(c)?`<div style="margin-top:4px"><span class="pill ${esc(lastChal(c).verdict)}">challenged: ${esc(lastChal(c).verdict)}</span></div>`:''}</td></tr>`).join(''):`<tr><td colspan="5"><div class="empty">No candidates match.</div></td></tr>`;
+  const rows=STATE.cands.filter(c=>(!st||c.status===st)&&(!mo||c.moat===mo)&&(!ln||(c.lane||'first')===ln)&&(!q||[c.name,c.oneline,c.evidence,c.window].join(' ').toLowerCase().includes(q))).sort((a,b)=>({unicorn:0,vetting:1,lead:2,killed:3}[a.status]-{unicorn:0,vetting:1,lead:2,killed:3}[b.status])||total(b)-total(a));
+  $('#cand-tbl tbody').innerHTML=rows.length?rows.map(c=>`<tr class="row" data-cand="${esc(c.id)}"><td><div class="name">${esc(c.name)}</div><div class="sub">${esc(c.oneline)}</div></td><td class="mono">${esc(c.moat||'—')}</td><td class="sub">${esc((c.window||'').slice(0,90))}</td><td><div class="score num">${total(c)}<span class="muted">/40</span></div><div class="bar ${meetsBar(c)?'gold':''}"><i style="width:${total(c)/40*100}%"></i></div></td><td><span class="pill ${esc(c.status)}">${lab(c.status)}</span>${c.lane==='arbitrage'?' <span class="pill tag">arbitrage</span>':''}${meetsBar(c)&&c.status!=='unicorn'?'<div class="mono muted" style="margin-top:4px">clears the bar</div>':''}${lastChal(c)?`<div style="margin-top:4px"><span class="pill ${esc(lastChal(c).verdict)}">challenged: ${esc(lastChal(c).verdict)}</span></div>`:''}</td></tr>`).join(''):`<tr><td colspan="5"><div class="empty">No candidates match.</div></td></tr>`;
 }
 function renderTerrs(){
   const q=$('#terr-q').value.toLowerCase(),st=$('#terr-status').value,vc=$('#terr-vector').value;
@@ -459,7 +464,7 @@ function renderJournal(){
   const k=$('#jour-kind').value;const rows=STATE.journal.filter(e=>!k||e.kind===k);
   $('#jour-list').innerHTML=rows.length?rows.map(e=>`<div class="item ${e.kind==='decision'?'accent':e.kind==='insight'?'green':''} row" data-jour="${esc(e.id)}" style="cursor:pointer"><div class="t">${esc(e.title)} <span class="pill tag">${esc(e.kind)}</span> <span class="mono muted">${esc(e.date)}</span></div><div class="m" style="white-space:pre-wrap">${esc(e.body)}</div></div>`).join(''):`<div class="empty">No journal entries.</div>`;
 }
-['#cand-q','#cand-status','#cand-moat'].forEach(s=>$(s).addEventListener('input',renderCands));
+['#cand-q','#cand-status','#cand-moat','#cand-lane'].forEach(s=>$(s).addEventListener('input',renderCands));
 ['#terr-q','#terr-status','#terr-vector'].forEach(s=>$(s).addEventListener('input',renderTerrs));
 ['#shelf-q','#shelf-pays'].forEach(s=>$(s).addEventListener('input',renderShelves));
 $('#jour-kind').addEventListener('input',renderJournal);
@@ -487,10 +492,11 @@ function openCand(id){
   const bar=meetsBar(c);
   panel.innerHTML=`<div class="head"><div><div class="eyebrow">Idea file</div><h2>${esc(c.name||'New idea')}</h2></div><button class="btn ghost sm" id="dr-close">Close</button></div>
   ${roNote()}
-  <div class="verdict ${bar?'yes':'no'}" id="dr-verdict">${bar?'Clears the bar. First, fresh, and nobody has done it.':'Below the bar: '+barFail(c)}</div>
+  <div class="verdict ${bar?'yes':'no'}" id="dr-verdict">${bar?(c.lane==='arbitrage'?'Clears the bar. A measured gap, cheap to work, still open.':'Clears the bar. First, fresh, and nobody has done it.'):'Below the bar: '+barFail(c)}</div>
   ${fld('c-name','Name',c.name)}
   ${fld('c-oneline','The idea in one sentence',c.oneline)}
-  <div class="f2">${self('c-moat','Kind of head start (optional)',c.moat,[['','—'],...MOAT_TYPES.map(m=>[m,m])])}${self('c-status','Status',c.status,[['lead','Lead (worth a look)'],['vetting','Being checked'],['unicorn','Unicorn (clears the bar, challenged)'],['killed','Dropped']])}</div>
+  <div class="f2">${self('c-lane','Kind of idea',c.lane||'first',[['first','Be first (the idea is the magic)'],['arbitrage','Arbitrage (buy here, sell there, the gap is the idea)']])}${self('c-status','Status',c.status,[['lead','Lead (worth a look)'],['vetting','Being checked'],['unicorn','Unicorn (clears the bar, challenged)'],['killed','Dropped']])}</div>
+  <div class="f2">${self('c-moat','Kind of head start (optional)',c.moat,[['','—'],...MOAT_TYPES.map(m=>[m,m])])}<div class="f"><label>&nbsp;</label><div class="muted" style="font-size:13px">For arbitrage the bar is different: the gap must be measured today on both sides with fees, it must be cheap to work, and you must say what will close it.</div></div></div>
   ${fld('c-shift','What changed, and when (the thing that opened the door)',c.shift,'textarea','placeholder="The new tool, store, rule or launch. Put a date on it."')}
   ${fld('c-window','How long the door stays open, and how you know',c.window,'textarea')}
   <div class="f"><label>Why nobody has done it yet (pick all that apply)</label><div class="chips" id="c-recipes">${STATE.recipes.map(r=>`<button type="button" class="chip" data-r="${esc(r.id)}" aria-pressed="${(c.recipes||[]).includes(r.id)}">${esc(r.name)}</button>`).join('')}</div></div>
@@ -504,13 +510,13 @@ function openCand(id){
   <div class="actions"><div>${c.id&&STATE.canWrite?'<button class="btn danger sm" id="dr-del">Delete</button>':''}</div><div>${STATE.canWrite?'<button class="btn" id="dr-save">Save</button>':''}</div></div>`;
   if(c.id)wireChallenge(c,'cand');
   $('#dr-close').addEventListener('click',closeDrawer);
-  const live=()=>{const sc={};SCORE_DIMS.forEach(([k])=>{sc[k]=Number($('#s-'+k).value);$('#sv-'+k).textContent=sc[k]});const rec=$$('#c-recipes .chip[aria-pressed="true"]').map(b=>b.dataset.r);const tmp={scores:sc,recipes:rec,moat:$('#c-moat').value};const t=total(tmp);$('#s-total').textContent=t;const ok=meetsBar(tmp);const v=$('#dr-verdict');v.className='verdict '+(ok?'yes':'no');v.textContent=ok?'Clears the bar. First, fresh, and nobody has done it.':'Below the bar: '+barFail(tmp)};
-  SCORE_DIMS.forEach(([k])=>$('#s-'+k).addEventListener('input',live));$('#c-moat').addEventListener('input',live);
+  const live=()=>{const sc={};SCORE_DIMS.forEach(([k])=>{sc[k]=Number($('#s-'+k).value);$('#sv-'+k).textContent=sc[k]});const rec=$$('#c-recipes .chip[aria-pressed="true"]').map(b=>b.dataset.r);const tmp={scores:sc,recipes:rec,moat:$('#c-moat').value,lane:$('#c-lane').value};const t=total(tmp);$('#s-total').textContent=t;const ok=meetsBar(tmp);const v=$('#dr-verdict');v.className='verdict '+(ok?'yes':'no');v.textContent=ok?(tmp.lane==='arbitrage'?'Clears the bar. A measured gap, cheap to work, still open.':'Clears the bar. First, fresh, and nobody has done it.'):'Below the bar: '+barFail(tmp)};
+  SCORE_DIMS.forEach(([k])=>$('#s-'+k).addEventListener('input',live));$('#c-moat').addEventListener('input',live);$('#c-lane').addEventListener('input',live);
   $$('#c-recipes .chip').forEach(b=>b.addEventListener('click',()=>{if(!STATE.canWrite)return;b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true');live()}));
   if(!STATE.canWrite)panel.querySelectorAll('input,select,textarea').forEach(i=>i.disabled=true);
   const save=$('#dr-save');if(save)save.addEventListener('click',async()=>{
     const sc={};SCORE_DIMS.forEach(([k])=>sc[k]=Number($('#s-'+k).value));
-    const data={name:$('#c-name').value.trim(),oneline:$('#c-oneline').value.trim(),moat:$('#c-moat').value,status:$('#c-status').value,shift:$('#c-shift').value,window:$('#c-window').value,recipes:$$('#c-recipes .chip[aria-pressed="true"]').map(b=>b.dataset.r),scores:sc,evidence:$('#c-evidence').value,territory:$('#c-territory').value,kill:$('#c-kill').value,next:$('#c-next').value,deadline:$('#c-deadline').value.trim(),challenges:c.challenges||[],seed:c.seed||[],date:c.date||today(),updated:today()};
+    const data={name:$('#c-name').value.trim(),oneline:$('#c-oneline').value.trim(),moat:$('#c-moat').value,status:$('#c-status').value,shift:$('#c-shift').value,window:$('#c-window').value,recipes:$$('#c-recipes .chip[aria-pressed="true"]').map(b=>b.dataset.r),scores:sc,evidence:$('#c-evidence').value,territory:$('#c-territory').value,kill:$('#c-kill').value,next:$('#c-next').value,deadline:$('#c-deadline').value.trim(),lane:$('#c-lane').value||'first',challenges:c.challenges||[],seed:c.seed||[],date:c.date||today(),updated:today()};
     if(!data.name){toast('Name it first');return}
     save.disabled=true;try{const ref=c.id?db.collection('candidates').doc(c.id):db.collection('candidates').doc();await ref.set(data);toast('Saved');closeDrawer()}catch(e){toast('Save failed: '+(e&&e.code||'error'));save.disabled=false}
   });
