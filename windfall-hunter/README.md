@@ -23,3 +23,5 @@ and which carry a specific reason nobody has claimed them yet.
 | `journal`     | cycle logs, insights, decisions, pivots |
 
 Unicorn bar: "Are you first?" 4 or 5 (counted), "Did the door just open?" 3 or more, total 30 or more, one reason named for why nobody has done it, and a survived challenge. Score key `first` replaced `moat` on Oct 9 2026. Candidates carry `lane`: `first` (default), `arbitrage`, or `winwinwin` (three named winners in `parties`, one per line; bar: pull >= 4, capital >= 4, monetize >= 3, window >= 3, total >= 28, a reason named, nobody loses); arbitrage ideas use a different bar (window >= 3, monetize >= 4, capital >= 4, total >= 28, a reason named, and the closing mechanism written down).
+
+- `triggers`: doors that could open, each with a 48-hour plan. Fields: name, fires_when, how_to_check (url), cadence, playbook, needs, why_unicorn, kill, status (armed|fired|expired), added, last_checked, fired_on, note, order. The Board leads with these since Oct 11; routines check them first.

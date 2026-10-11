@@ -97,6 +97,8 @@ section.tab{display:none}section.tab.active{display:block}
 .item .t{font-weight:600}
 .item .m{font-size:13px;color:var(--muted)}
 .empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line)}
+.verdict{border-left:4px solid var(--gold);font-size:15px;line-height:1.5}.verdict b{font-size:17px}
+.trig{border-left:3px solid var(--line);padding:8px 12px;background:var(--panel)}.trig.fired{border-left-color:var(--gold);background:var(--gold-soft)}.trig.due{border-left-color:var(--accent)}.trig .t{font-weight:600}.trig .m{color:var(--muted);font-size:13px;margin-top:4px}.trig details{margin-top:6px}.trig summary{cursor:pointer;color:var(--accent);font-size:13px}.trig .play{font-size:13px;margin-top:6px;white-space:pre-wrap}.trig .acts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 
 .playbook{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
 .pb{background:var(--panel);border:1px solid var(--line);padding:14px 16px}
@@ -178,15 +180,17 @@ section.tab{display:none}section.tab.active{display:block}
   </nav>
 
   <section class="tab active" id="tab-board">
-    <div class="grid tiles" id="tiles"></div>
+    <div class="card verdict" id="board-verdict"></div>
+    <div class="card" style="margin-top:14px" id="board-since"></div>
+    <div class="grid tiles" id="tiles" style="margin-top:14px"></div>
+    <div class="card" style="margin-top:14px"><h3>Triggers we are watching <span class="eyebrow">a unicorn is caught the day a door opens; each trigger has a 48-hour plan ready</span></h3><div class="list" id="board-triggers"></div></div>
     <div class="grid two" style="margin-top:14px">
       <div>
-        <div class="card"><h3>Clock is ticking <span class="eyebrow">ship it or drop it by the date</span></h3><div class="list" id="board-clock"></div></div>
-        <div class="card" style="margin-top:14px"><h3>Counts that need a person with a browser <span class="eyebrow">this machine cannot open most stores</span></h3><div class="list" id="board-counts"></div></div>
-        <div class="card" style="margin-top:14px"><h3>Best ideas right now <span class="eyebrow">unicorns and ideas being checked, by score</span></h3><div class="list" id="board-cands"></div></div>
+        <div class="card"><h3>Counts that need a person with a browser <span class="eyebrow">this machine cannot open most stores</span></h3><div class="list" id="board-counts"></div></div>
+        <div class="card" style="margin-top:14px"><h3>Clock is ticking <span class="eyebrow">ship it or drop it by the date</span></h3><div class="list" id="board-clock"></div></div>
       </div>
       <div>
-        <div class="card"><h3>Loose threads <span class="eyebrow">pull these next</span></h3><div class="list" id="board-threads"></div></div>
+        <div class="card"><h3>Ideas still alive <span class="eyebrow">being checked and leads, by score</span></h3><div class="list" id="board-cands"></div></div>
         <div class="card" style="margin-top:14px"><h3>Latest from the journal</h3><div class="list" id="board-journal"></div></div>
       </div>
     </div>
@@ -195,7 +199,7 @@ section.tab{display:none}section.tab.active{display:block}
   <section class="tab" id="tab-candidates">
     <div class="toolbar">
       <input id="cand-q" placeholder="Search ideas…">
-      <select id="cand-status"><option value="">Any status</option><option value="unicorn">Unicorn</option><option value="vetting">Being checked</option><option value="lead">Lead</option><option value="killed">Dropped</option></select>
+      <select id="cand-status"><option value="alive" selected>Alive (being checked and leads)</option><option value="">Any status</option><option value="unicorn">Unicorn</option><option value="vetting">Being checked</option><option value="lead">Lead</option><option value="killed">Dropped</option></select>
       <select id="cand-lane"><option value="">Any kind of idea</option><option value="first">Be first</option><option value="arbitrage">Arbitrage</option><option value="winwinwin">Win-win-win</option></select>
       <select id="cand-moat"><option value="">Any kind of head start</option></select>
       <button class="btn" id="cand-new" hidden>+ Idea</button>
@@ -280,6 +284,7 @@ section.tab{display:none}section.tab.active{display:block}
         <li><b>Way in.</b> A kind of place where first-mover ideas hide. The list is on "Where to look".</li>
         <li><b>Wave.</b> Millions of people getting a new thing at once. Waves create new behaviors, and each new behavior needs a page, a table or a guide that nobody has made yet.</li>
         <li><b>Early warning.</b> A sign a wave is coming before it is news.</li>
+        <li><b>Trigger.</b> A door that could open on a date: a tool shipping, a store opening, a rule taking effect, a physical test passing. Each one on the Board has a 48-hour plan written in advance, what you would need, why it could be the one, and when to drop it. The routines check them every week. A unicorn is caught the day a trigger fires, not found by searching.</li>
         <li><b>Arbitrage.</b> The second kind of idea in this ledger. Buy or get something in one place, sell it in another, and the gap between the two prices is the whole idea. Being first does not matter; the gap matters. It has its own bar, below.</li>
         <li><b>Win-win-win.</b> The third kind of idea. Three parties each gain: the buyer, a partner or platform, and you. Because the other two gain, they bring people to you, so it spreads by pull instead of by selling. It has its own bar, below.</li>
         <li><b>Challenge.</b> The button on every record. A second pair of eyes on our side: the strongest objection, what is missing, what would flip the verdict, and what new path opens.</li>
@@ -307,6 +312,7 @@ section.tab{display:none}section.tab.active{display:block}
       <p>Some windfalls are not about being first or about a price gap. They are about sitting where three parties all gain and nobody loses. A platform in its launch weeks pays for growth; a user gets a bonus for joining through you; you keep the bounty. A device maker wants content in a language it does not have; parents want it; you make it. A vendor wants a lead magnet; a shop wants the card; you get paid to make it. When the structure is right, the other two parties do the selling.</p>
       <div class="callout">The win-win-win bar: <b>name all three winners and what each gets</b>, in one line each; "do they come to you" must be 4 or 5, because the test is that the other two parties are already sending people your way, not that they might; "costs nothing" 4 or 5; your own win ("easy to get paid") 3 or more; "did the door just open" 3 or more with a date; total 28 or more; a reason named for why nobody has done it. And <b>nobody loses</b>: if an incumbent is displaced and will fight, it is not win-win-win, it is a fight. A platform bounty with an end date is the cleanest form; record the end date as the window.</div>
       <h2 style="margin-top:20px">How the hunt runs</h2>
+      <div class="callout"><b>Since Oct 11 the hunt runs on triggers first.</b> Twelve cycles of searching for empty shelves found no unicorn, and the reason is structural: anything findable in search results has been findable by thousands of other people for weeks. The 2022 coloring-book win was not found by analysis; people with a new tool in hand tried the obvious thing within days. So the Board now leads with a list of dated triggers (a door that could open: a tool shipping, a store opening, a rule taking effect, a test passing), each with a 48-hour plan written in advance. The routines check the triggers every week and shout the day one fires. Hunting for new ideas continues, but only to add triggers, not to pile up leads.</div>
       <ol>
         <li><b>Check the archive first.</b> Type the idea into "Has this been searched already?". If the ground is fully searched, do not dig it again. If it is promising with a loose thread, pull that thread.</li>
         <li><b>Log the ground before digging.</b> Name it, say which way in you took, mark it "being dug". This is what stops two sessions doing the same work.</li>
@@ -417,7 +423,7 @@ const LABELS={unicorn:'Unicorn',vetting:'Being checked',lead:'Lead',killed:'Drop
 function lab(s){return LABELS[s]||s||''}
 function barFail(c){const sc=k=>Number(c.scores&&c.scores[k])||0;if(c.lane==='winwinwin'){const parties=String(c.parties||'').split('\n').map(x=>x.trim()).filter(Boolean);if(parties.length<3)return 'name all three winners and what each gets (one per line)';if(sc('pull')<4)return 'the other two parties are not visibly bringing people to you yet (pull needs 4 or 5)';if(sc('capital')<4)return 'needs real money up front (needs 4 or 5)';if(sc('monetize')<3)return 'your own win is not clear enough (easy to get paid needs 3 or more)';if(sc('window')<3)return 'the door did not just open (needs 3 or more, dated)';if(total(c)<28)return 'total '+total(c)+'/40, needs 28';if(!(c.recipes||[]).length)return 'no reason named for why nobody has done it';return ''}if(c.lane==='arbitrage'){if(sc('window')<3)return 'the gap is not shown to exist today (needs 3 or more, measured)';if(sc('monetize')<4)return 'the gap after fees is not clearly worth it (needs 4 or 5)';if(sc('capital')<4)return 'needs real money up front (needs 4 or 5)';if(total(c)<28)return 'total '+total(c)+'/40, needs 28';if(!(c.recipes||[]).length)return 'no reason named for why the gap is still open';return ''}if(sc('first')<BAR.first)return 'not clearly first yet (needs 4 or 5, counted)';if(sc('window')<BAR.window)return 'the door did not just open (needs 3 or more)';if(total(c)<BAR.total)return 'total '+total(c)+'/40, needs '+BAR.total;if(!(c.recipes||[]).length)return 'no reason named for why nobody has done it';return ''}
 const MOAT_TYPES=['Flagship by default','Scarce asset','Grandfathered entry','Mandatory stop','Exclusive','Default slot','Orphaned customers','Giant needs you','Locked-in customers','Caught the wave','Handed for free','Irreplaceable data','Only road','Legal for you only'];
-const STATE={cands:[],terrs:[],vectors:[],recipes:[],moats:[],journal:[],signals:[],cases:[],waves:[],shelves:[],counts:[],canWrite:false,db:null,uid:null};
+const STATE={cands:[],terrs:[],vectors:[],recipes:[],moats:[],journal:[],signals:[],cases:[],waves:[],shelves:[],counts:[],triggers:[],canWrite:false,db:null,uid:null};
 let db=null,sampleFn=null;
 function lastChal(x){return (x.challenges&&x.challenges[0])||null}
 function slug(t){return String(t).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||('t-'+Date.now())}
@@ -437,24 +443,49 @@ function overlap(q,t){const a=new Set(tokens(q));if(!a.size)return 0;const b=new
 // ---------- render ----------
 function renderAll(){renderBoard();renderCands();renderTerrs();renderPlaybook();renderDetector();renderShelves();renderJournal();$('#ct-shelf').textContent=STATE.shelves.length||'';$('#ct-sig').textContent=STATE.signals.length||'';$('#ct-cand').textContent=STATE.cands.length||'';$('#ct-terr').textContent=STATE.terrs.length||'';$('#ct-jour').textContent=STATE.journal.length||'';}
 function renderBoard(){
-  const u=STATE.cands.filter(c=>c.status==='unicorn').length,v=STATE.cands.filter(c=>c.status==='vetting').length,l=STATE.cands.filter(c=>c.status==='lead').length,k=STATE.cands.filter(c=>c.status==='killed').length,ab=STATE.cands.filter(c=>c.lane==='arbitrage'&&c.status!=='killed').length,w3=STATE.cands.filter(c=>c.lane==='winwinwin'&&c.status!=='killed').length;
-  const ex=STATE.terrs.filter(t=>t.status==='exhausted').length,fe=STATE.terrs.filter(t=>t.status==='fertile').length,dg=STATE.terrs.filter(t=>t.status==='digging'||t.status==='open').length;
-  $('#tiles').innerHTML=[['gold',u,'Unicorns'],['blue',v,'Being checked'],['accent',l,'Leads'],['green',ab,'Arbitrage, live'],['green',w3,'Win-win-win, live'],['red',k,'Dropped'],['green',fe,'Ground with promise'],['',ex,'Ground fully searched'],['',dg,'Being dug now']].map(([c,n,l])=>`<div class="tile ${c}"><div class="l">${l}</div><div class="v num">${n}</div></div>`).join('');
-  const top=STATE.cands.filter(c=>c.status==='unicorn'||c.status==='vetting').sort((a,b)=>total(b)-total(a)).slice(0,8);
-  $('#board-cands').innerHTML=top.length?top.map(c=>`<div class="item ${c.status==='unicorn'?'gold':'accent'} row" data-cand="${esc(c.id)}" style="cursor:pointer"><div class="t">${esc(c.name)} <span class="pill ${esc(c.status)}">${lab(c.status)}</span>${c.lane==='arbitrage'?' <span class="pill tag">arbitrage</span>':c.lane==='winwinwin'?' <span class="pill tag">win-win-win</span>':''} <span class="score num">${total(c)}/40</span></div><div class="m">${esc(c.oneline)}</div></div>`).join(''):`<div class="empty">No unicorns yet. The archive fills up first; the unicorns come after.</div>`;
-  const live=STATE.cands.filter(c=>c.deadline&&c.status!=='killed').map(c=>({c,days:Math.ceil((new Date(c.deadline+'T00:00:00')-new Date(today()+'T00:00:00'))/86400000)})).sort((a,b)=>a.days-b.days);
-  $('#board-clock').innerHTML=live.length?live.map(({c,days})=>`<div class="item ${days<0?'':days<=3?'accent':'green'} row" data-cand="${esc(c.id)}" style="cursor:pointer;${days<0?'border-left-color:var(--red)':''}"><div class="t">${esc(c.name.slice(0,90))}${c.name.length>90?'…':''} <span class="pill ${days<0?'killed':days<=3?'open':'fertile'}">${days<0?'overdue '+(-days)+'d':days===0?'today':days+'d left'}</span></div><div class="m">${esc((c.next||'').slice(0,160))}</div></div>`).join(''):`<div class="empty">No idea has a date yet. On a big launch the window is weeks, so set one.</div>`;
+  const alive=STATE.cands.filter(c=>c.status==='unicorn'||c.status==='vetting'||c.status==='lead');
+  const u=STATE.cands.filter(c=>c.status==='unicorn').length,v=STATE.cands.filter(c=>c.status==='vetting').length,l=STATE.cands.filter(c=>c.status==='lead').length,k=STATE.cands.filter(c=>c.status==='killed').length;
+  const armed=STATE.triggers.filter(t=>t.status==='armed'),fired=STATE.triggers.filter(t=>t.status==='fired');
   const cts=STATE.counts.filter(x=>x.status!=='done').sort((a,b)=>String(a.due||'9999').localeCompare(String(b.due||'9999')));
-  $('#board-counts').innerHTML=cts.length?cts.map(x=>`<div class="item accent"><div class="t">${esc(x.what)} <span class="pill tag">${esc(x.minutes||'')}${x.minutes?' min':''}</span>${x.due?` <span class="mono muted">by ${esc(x.due)}</span>`:''}</div><div class="m">${esc(x.how||'')}${x.url?` <a href="${esc(x.url)}" target="_blank" rel="noopener">open</a>`:''}<br><span class="muted">Why it matters:</span> ${esc(x.why||'')}${STATE.canWrite?` <button class="btn ghost sm" data-count-done="${esc(x.id)}" style="margin-left:6px">Done</button>`:''}</div></div>`).join(''):`<div class="empty">Nothing waiting on a person right now.</div>`;
-  const th=STATE.terrs.filter(t=>t.thread&&t.thread.trim()&&t.thread.trim().toLowerCase()!=='none'&&t.status!=='exhausted').slice(0,8);
-  $('#board-threads').innerHTML=th.length?th.map(t=>`<div class="item green row" data-terr="${esc(t.id)}" style="cursor:pointer"><div class="t">${esc(t.name)}</div><div class="m">${esc(t.thread)}</div></div>`).join(''):`<div class="empty">No loose threads. Pick a way in from "Where to look" and log new ground.</div>`;
+  const chal=STATE.cands.filter(c=>(c.challenges||[]).length).length;
+  // verdict line
+  const lastJ=STATE.journal[0];
+  $('#board-verdict').innerHTML=`<b>${u?u+' unicorn'+(u>1?'s':'')+' found.':'No unicorn yet.'}</b> ${STATE.cands.length} ideas filed, ${chal} put through a challenge, ${k} dropped, ${v+l} still alive. ${fired.length?`<b style="color:var(--gold)">${fired.length} trigger${fired.length>1?'s have':' has'} fired: act on the plan below.</b>`:`${armed.length} triggers armed; none has fired.`} ${cts.length?`${cts.length} count${cts.length>1?'s':''} waiting for a person with a browser.`:''}${lastJ?` <span class="muted">Last entry: ${esc(lastJ.date)}, ${esc(lastJ.title)}.</span>`:''}`;
+  // since you last looked
+  let seen='';try{seen=localStorage.getItem('wh-seen')||''}catch(e){}
+  const dOf=x=>String(x._upd||'').slice(0,10);
+  const changed=col=>col.filter(x=>dOf(x)&&(!seen||dOf(x)>seen));
+  const nc=changed(STATE.cands),nt=changed(STATE.terrs),nj=STATE.journal.filter(e=>!seen||String(e.date)>seen),ntr=changed(STATE.triggers),ncts=changed(STATE.counts);
+  const fmt=(arr,f)=>arr.slice(0,6).map(f).join(', ')+(arr.length>6?` and ${arr.length-6} more`:'');
+  const parts=[];
+  if(nj.length)parts.push(`<b>${nj.length} journal entr${nj.length>1?'ies':'y'}</b>: ${fmt(nj,e=>esc(e.title))}`);
+  if(nc.length)parts.push(`<b>${nc.length} idea${nc.length>1?'s':''} filed or changed</b>: ${fmt(nc,c=>`${esc(c.name.slice(0,60))}${c.name.length>60?'…':''} (${lab(c.status).toLowerCase()})`)}`);
+  if(nt.length)parts.push(`<b>${nt.length} piece${nt.length>1?'s':''} of ground</b>: ${fmt(nt,t=>esc(t.name.slice(0,60)))}`);
+  if(ntr.length)parts.push(`<b>${ntr.length} trigger${ntr.length>1?'s':''} added or checked</b>`);
+  if(ncts.length)parts.push(`<b>${ncts.length} count${ncts.length>1?'s':''} added or closed</b>`);
+  $('#board-since').innerHTML=`<h3>Since you last looked <span class="eyebrow">${seen?'after '+esc(seen):'first visit: everything is new'}</span> <button class="btn ghost sm" id="mark-seen" style="float:right">Mark all as seen</button></h3>${parts.length?`<div class="m" style="line-height:1.7">${parts.join('<br>')}</div>`:`<div class="muted">Nothing has changed in the ledger since ${esc(seen)}.</div>`}<div class="muted" style="font-size:12px;margin-top:6px">Dates come from the ledger's own change stamps; if the page cannot read them, only journal entries show here.</div>`;
+  $('#mark-seen').onclick=()=>{try{localStorage.setItem('wh-seen',today())}catch(e){}renderBoard();toast('Marked as seen')};
+  // tiles
+  $('#tiles').innerHTML=[['gold',u,'Unicorns'],['gold',fired.length,'Triggers fired'],['accent',armed.length,'Triggers armed'],['blue',v,'Being checked'],['',l,'Leads'],['accent',cts.length,'Counts for a person'],['red',k,'Dropped']].map(([c,n,l])=>`<div class="tile ${c}"><div class="l">${l}</div><div class="v num">${n}</div></div>`).join('');
+  // triggers
+  const trs=STATE.triggers.slice().sort((a,b)=>(a.status==='fired'?0:1)-(b.status==='fired'?0:1)||(a.order||99)-(b.order||99));
+  $('#board-triggers').innerHTML=trs.length?trs.map(t=>{const due=/dated/i.test(t.cadence||'');return `<div class="trig ${t.status==='fired'?'fired':due?'due':''}"><div class="t">${esc(t.name)} <span class="pill ${t.status==='fired'?'unicorn':t.status==='expired'?'killed':'open'}">${t.status==='fired'?'FIRED '+esc(t.fired_on||''):t.status==='expired'?'expired':'armed'}</span> <span class="pill tag">${esc(t.cadence||'')}</span></div><div class="m"><b>Fires when:</b> ${esc(t.fires_when||'')} ${t.how_to_check?`<a href="${esc(t.how_to_check)}" target="_blank" rel="noopener">check here</a>`:''} <span class="mono">last checked ${esc(t.last_checked||'never')}</span></div>${t.note?`<div class="m"><b>Note:</b> ${esc(t.note)}</div>`:''}<details><summary>The 48-hour plan, what you need, why it could be a unicorn, and when to drop it</summary><div class="play"><b>Plan:</b> ${esc(t.playbook||'')}\n<b>You need:</b> ${esc(t.needs||'nothing')}\n<b>Why it could be the one:</b> ${esc(t.why_unicorn||'')}\n<b>Drop it if:</b> ${esc(t.kill||'')}</div></details>${STATE.canWrite?`<div class="acts">${t.status==='armed'?`<button class="btn sm" data-trig-fire="${esc(t.id)}">It fired</button><button class="btn ghost sm" data-trig-check="${esc(t.id)}">Checked, nothing yet</button><button class="btn ghost sm" data-trig-expire="${esc(t.id)}">Expired</button>`:`<button class="btn ghost sm" data-trig-rearm="${esc(t.id)}">Re-arm</button>`}</div>`:''}</div>`}).join(''):`<div class="empty">No triggers yet.</div>`;
+  // alive ideas
+  const top=alive.sort((a,b)=>total(b)-total(a)).slice(0,10);
+  $('#board-cands').innerHTML=top.length?top.map(c=>`<div class="item ${c.status==='unicorn'?'gold':c.status==='vetting'?'accent':''} row" data-cand="${esc(c.id)}" style="cursor:pointer"><div class="t">${esc(c.name.slice(0,110))}${c.name.length>110?'…':''} <span class="pill ${esc(c.status)}">${lab(c.status)}</span>${c.lane==='arbitrage'?' <span class="pill tag">arbitrage</span>':c.lane==='winwinwin'?' <span class="pill tag">win-win-win</span>':''} <span class="mono">${total(c)}/40</span></div><div class="m">${esc((c.next||c.oneline||'').slice(0,200))}${(c.next||c.oneline||'').length>200?'…':''}</div></div>`).join(''):`<div class="empty">Nothing alive. Everything filed so far has been dropped after a challenge.</div>`;
+  // clock
+  const live=STATE.cands.filter(c=>c.deadline&&c.status!=='killed').map(c=>({c,days:Math.ceil((new Date(c.deadline+'T00:00:00')-new Date(today()+'T00:00:00'))/86400000)})).sort((a,b)=>a.days-b.days);
+  $('#board-clock').innerHTML=live.length?live.map(({c,days})=>`<div class="item ${days<0?'':days<=3?'accent':'green'} row" data-cand="${esc(c.id)}" style="cursor:pointer;${days<0?'border-left-color:var(--red)':''}"><div class="t">${esc(c.name.slice(0,90))}${c.name.length>90?'…':''} <span class="pill ${days<0?'killed':days<=3?'open':'fertile'}">${days<0?'overdue '+(-days)+'d':days===0?'today':days+'d left'}</span></div><div class="m">${esc((c.next||'').slice(0,160))}</div></div>`).join(''):`<div class="empty">No deadlines. Nothing is being checked right now.</div>`;
+  // counts
+  $('#board-counts').innerHTML=cts.length?cts.map(x=>`<div class="item accent"><div class="t">${esc(x.what)} <span class="pill tag">${esc(x.minutes||'')}${x.minutes?' min':''}</span>${x.due?` <span class="mono muted">by ${esc(x.due)}</span>`:''}</div><div class="m">${esc(x.how||'')}${x.url?` <a href="${esc(x.url)}" target="_blank" rel="noopener">open</a>`:''}<br><span class="muted">Why it matters: ${esc(x.why||'')}</span></div>${STATE.canWrite?`<div style="margin-top:6px"><button class="btn ghost sm" data-count-done="${esc(x.id)}">Done, record what I found</button></div>`:''}</div>`).join(''):`<div class="empty">No open counts.</div>`;
+  // journal
   const j=STATE.journal.slice(0,4);
-  $('#board-journal').innerHTML=j.length?j.map(e=>`<div class="item"><div class="t">${esc(e.title)} <span class="pill tag">${esc(e.kind)}</span> <span class="mono muted">${esc(e.date)}</span></div><div class="m">${esc((e.body||'').slice(0,220))}${(e.body||'').length>220?'…':''}</div></div>`).join(''):`<div class="empty">Nothing logged yet.</div>`;
+  $('#board-journal').innerHTML=j.length?j.map(e=>`<div class="item row" data-jour="${esc(e.id)}" style="cursor:pointer"><div class="t">${esc(e.title)} <span class="pill tag">${esc(e.kind)}</span> <span class="mono muted">${esc(e.date)}</span></div><div class="m">${esc((e.body||'').slice(0,220))}${(e.body||'').length>220?'…':''}</div></div>`).join(''):`<div class="empty">Nothing logged yet.</div>`;
 }
 function renderCands(){
   const q=$('#cand-q').value.toLowerCase(),st=$('#cand-status').value,mo=$('#cand-moat').value,ln=$('#cand-lane').value;
   const sel=$('#cand-moat');if(sel.options.length<2){MOAT_TYPES.forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;sel.appendChild(o)})}
-  const rows=STATE.cands.filter(c=>(!st||c.status===st)&&(!mo||c.moat===mo)&&(!ln||(c.lane||'first')===ln)&&(!q||[c.name,c.oneline,c.evidence,c.window].join(' ').toLowerCase().includes(q))).sort((a,b)=>({unicorn:0,vetting:1,lead:2,killed:3}[a.status]-{unicorn:0,vetting:1,lead:2,killed:3}[b.status])||total(b)-total(a));
+  const rows=STATE.cands.filter(c=>(!st||(st==='alive'?c.status!=='killed':c.status===st))&&(!mo||c.moat===mo)&&(!ln||(c.lane||'first')===ln)&&(!q||[c.name,c.oneline,c.evidence,c.window].join(' ').toLowerCase().includes(q))).sort((a,b)=>({unicorn:0,vetting:1,lead:2,killed:3}[a.status]-{unicorn:0,vetting:1,lead:2,killed:3}[b.status])||total(b)-total(a));
   $('#cand-tbl tbody').innerHTML=rows.length?rows.map(c=>`<tr class="row" data-cand="${esc(c.id)}"><td><div class="name">${esc(c.name)}</div><div class="sub">${esc(c.oneline)}</div></td><td class="mono">${esc(c.moat||'—')}</td><td class="sub">${esc((c.window||'').slice(0,90))}</td><td><div class="score num">${total(c)}<span class="muted">/40</span></div><div class="bar ${meetsBar(c)?'gold':''}"><i style="width:${total(c)/40*100}%"></i></div></td><td><span class="pill ${esc(c.status)}">${lab(c.status)}</span>${c.lane==='arbitrage'?' <span class="pill tag">arbitrage</span>':c.lane==='winwinwin'?' <span class="pill tag">win-win-win</span>':''}${meetsBar(c)&&c.status!=='unicorn'?'<div class="mono muted" style="margin-top:4px">clears the bar</div>':''}${lastChal(c)?`<div style="margin-top:4px"><span class="pill ${esc(lastChal(c).verdict)}">challenged: ${esc(lastChal(c).verdict)}</span></div>`:''}</td></tr>`).join(''):`<tr><td colspan="5"><div class="empty">No candidates match.</div></td></tr>`;
 }
 function renderTerrs(){
@@ -497,6 +528,12 @@ $('#terr-check').addEventListener('input',()=>{
   const c=STATE.cands.map(t=>[overlap(q,{name:t.name,keywords:t.oneline,notes:t.evidence,verdict:t.window}),t]).filter(x=>x[0]>0).sort((a,b)=>b[0]-a[0]).slice(0,4);
   out.innerHTML=(m.length||c.length)?m.map(([s,t])=>`<div class="item ${t.status==='exhausted'?'':'green'} row" data-terr="${esc(t.id)}" style="cursor:pointer"><div class="t">${esc(t.name)} <span class="pill ${esc(t.status)}">${lab(t.status)}</span> <span class="mono muted">${Math.round(s*100)}% match</span></div><div class="m">${esc(t.deadend||t.verdict||t.notes||'')}</div></div>`).join('')+c.map(([s,t])=>`<div class="item accent row" data-cand="${esc(t.id)}" style="cursor:pointer"><div class="t">${esc(t.name)} <span class="pill ${esc(t.status)}">${lab(t.status)}</span> <span class="mono muted">candidate · ${Math.round(s*100)}% match</span></div><div class="m">${esc(t.oneline)}</div></div>`).join(''):`<div class="item green"><div class="t">Clear ground.</div><div class="m">Nothing in the archive matches. Log it as new ground before you start digging.</div></div>`;
 });
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-trig-fire],[data-trig-check],[data-trig-expire],[data-trig-rearm]');if(!b||!db)return;const col=db.collection('triggers');try{
+  if(b.dataset.trigFire){const n=prompt('What happened? One or two sentences (saved on the trigger; the plan above is now live).');if(n===null)return;await col.doc(b.dataset.trigFire).update({status:'fired',fired_on:today(),note:n,last_checked:today()});toast('Trigger fired: the 48-hour plan is on')}
+  else if(b.dataset.trigCheck){await col.doc(b.dataset.trigCheck).update({last_checked:today()});toast('Checked')}
+  else if(b.dataset.trigExpire){const n=prompt('Why is this trigger no longer worth watching?');if(n===null)return;await col.doc(b.dataset.trigExpire).update({status:'expired',note:n,last_checked:today()});toast('Expired')}
+  else if(b.dataset.trigRearm){await col.doc(b.dataset.trigRearm).update({status:'armed',fired_on:'',last_checked:today()});toast('Re-armed')}
+}catch(err){toast('Save failed')}});
 document.addEventListener('click',async e=>{const d=e.target.closest('[data-count-done]');if(d&&db){const res=prompt('What did you find? One or two sentences (this is saved on the count and the next scan reads it).');if(res===null)return;try{await db.collection('counts').doc(d.dataset.countDone).update({status:'done',result:res,done:today()});toast('Saved')}catch(err){toast('Save failed')}return}});
 document.addEventListener('click',e=>{const r=e.target.closest('[data-cand],[data-terr],[data-jour]');if(!r)return;if(r.dataset.cand)openCand(r.dataset.cand);else if(r.dataset.terr)openTerr(r.dataset.terr);else if(r.dataset.jour)openJour(r.dataset.jour)});
 
@@ -661,8 +698,8 @@ renderAll();
   STATE.canWrite=can!==false;
   if(STATE.canWrite){$('#cand-new').hidden=false;$('#terr-new').hidden=false;$('#jour-new').hidden=false}
   $('#who').innerHTML=`<b>${STATE.canWrite?'hunter':'observer'}</b><br>ledger live`;
-  const sub=(col,key,order)=>{let q=db.collection(col);if(order)q=q.orderBy(order[0],order[1]);q.onSnapshot(s=>{STATE[key]=s.docs.filter(d=>d.exists).map(d=>({id:d.id,...d.data()}));renderAll()},e=>{$('#who').innerHTML='<b>ledger error</b><br>'+esc(e.code)})};
-  sub('candidates','cands');sub('territories','terrs',['date','desc']);sub('vectors','vectors',['order','asc']);sub('recipes','recipes',['order','asc']);sub('moats','moats',['order','asc']);sub('journal','journal',['date','desc']);sub('signals','signals',['order','asc']);sub('cases','cases',['order','asc']);sub('waves','waves',['date','desc']);sub('shelves','shelves',['name','asc']);sub('counts','counts',['due','asc']);
+  const sub=(col,key,order)=>{let q=db.collection(col);if(order)q=q.orderBy(order[0],order[1]);q.onSnapshot(s=>{STATE[key]=s.docs.filter(d=>d.exists).map(d=>({id:d.id,_upd:(d.updatedAt||d.updateTime||(d.metadata&&d.metadata.updatedAt)||''),...d.data()}));renderAll()},e=>{$('#who').innerHTML='<b>ledger error</b><br>'+esc(e.code)})};
+  sub('candidates','cands');sub('triggers','triggers',['order','asc']);sub('territories','terrs',['date','desc']);sub('vectors','vectors',['order','asc']);sub('recipes','recipes',['order','asc']);sub('moats','moats',['order','asc']);sub('journal','journal',['date','desc']);sub('signals','signals',['order','asc']);sub('cases','cases',['order','asc']);sub('waves','waves',['date','desc']);sub('shelves','shelves',['name','asc']);sub('counts','counts',['due','asc']);
 })();
 })();
 </script>
